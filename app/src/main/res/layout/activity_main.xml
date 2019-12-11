@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout
+    android:id="@+id/view"
     android:padding="16dp"
     android:background="@color/backgroundColor"
     tools:context="MainActivity"
@@ -16,10 +17,9 @@
         android:text="Sudoku"
         android:textAlignment="center"
         android:textColor="@color/colorTextButtons"
-        android:textSize="150dp"
-        android:layout_marginTop="400dp"/>
+        android:textSize="60dp"
+        android:layout_marginTop="100dp"/>
     <LinearLayout
-        android:padding="16dp"
         android:gravity="center"
         android:background="@color/backgroundColor"
         tools:context=".MainActivity"
@@ -30,32 +30,35 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <Button
-            android:layout_width="750dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="Jogar"
-            android:textSize="50dp"
+            android:textSize="25dp"
             android:textColor="@color/colorTextButtons"
             android:background="@color/colorButtons"
-            android:layout_margin="25dp"
-            android:padding="10dp"></Button>
+            android:layout_margin="4dp"
+            android:padding="10dp"
+            android:onClick="jogar"></Button>
         <Button
-            android:layout_width="750dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="Jogar Multiplayer"
-            android:textSize="50dp"
+            android:textSize="25dp"
             android:textColor="@color/colorTextButtons"
             android:background="@color/colorButtons"
-            android:layout_margin="25dp"
-            android:padding="10dp"></Button>
+            android:layout_margin="4dp"
+            android:padding="10dp"
+            android:onClick="jogarMultiplayer"></Button>
         <Button
-            android:layout_width="750dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="Entrar"
-            android:textSize="50dp"
+            android:textSize="25dp"
             android:textColor="@color/colorTextButtons"
             android:background="@color/colorButtons"
-            android:layout_margin="25dp"
-            android:padding="10dp"></Button>
+            android:layout_margin="4dp"
+            android:padding="10dp"
+            android:onClick="entrar"></Button>
     </LinearLayout>
 
 </LinearLayout>
