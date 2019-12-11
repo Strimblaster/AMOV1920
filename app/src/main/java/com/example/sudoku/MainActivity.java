@@ -2,26 +2,59 @@ package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    private Button btnSinglePlayer, btnMultiPlayer, btnConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_menu);
+
+        btnSinglePlayer = findViewById(R.id.btnSinglePlayer);
+        btnMultiPlayer = findViewById(R.id.btnMultiPlayer);
+        btnConnect = findViewById(R.id.btnConnect);
+
+        btnSinglePlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSinglePlayer();
+            }
+        });
+        btnMultiPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToMultiPlayer();
+            }
+        });
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToConnect();
+            }
+        });
+
     }
 
-    public void jogar(View view) {
-        System.out.println("ola");
+    private void goToSinglePlayer() {
+        Intent intent = new Intent(this,  SinglePlayer.class);
+        startActivity(intent);
     }
 
-    public void jogarMultiplayer(View view) {
-        System.out.println("ola");
+    private void goToMultiPlayer() {
+        Intent intent = new Intent(this,  Multiplayer.class);
+        startActivity(intent);
     }
 
-    public void entrar(View view) {
-        System.out.println("ola");
+    private void goToConnect() {
+        Intent intent = new Intent(this,  Connect.class);
+        startActivity(intent);
     }
 }

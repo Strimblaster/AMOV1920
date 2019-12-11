@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Sudoku</string>
+    <string name="title">Sudoku</string>
+    <string name="btnPlay">Jogar</string>
+    <string name="btnMultiplayer">Jogar Multiplayer</string>
+    <string name="btnConnect">Entrar</string>
+
+    <string name="title_activity_single_player">SinglePlayer</string>
+    <string name="dummy_button">Um butão que nao serve para nada</string>
+    <string name="dummy_content">Uma coisa que nao serve para nada</string>
+
+    <string name="title_activity_multiplayer">multiplayer</string>
+
+    <string name="title_activity_connect">connect</string>
+
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="logo">Logo</string>
 </resources>
