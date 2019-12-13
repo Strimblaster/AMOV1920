@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@color/colorBackground"
     tools:context=".SinglePlayer">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <TextView
-        android:id="@+id/fullscreen_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/title_activity_single_player"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            style="?metaButtonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/backgroundColor"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/dummy_button"
-                style="?metaButtonBarButtonStyle"
-                android:layout_width="0dp"
+                android:id="@+id/btnNewGame"
+                android:layout_width="13dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dummy_button" />
+                android:background="@color/colorSinglePlayer"
+                android:text="Novo Jogo" />
+
+            <TextView
+                android:id="@+id/lbTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/underline"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="1:32"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textDirection="firstStrongRtl" />
+
+            <TextView
+                android:id="@+id/lbPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/left_underline"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="123"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite" />
 
         </LinearLayout>
 
-    </FrameLayout>
+        <!--        <GridView-->
+<!--            android:focusableInTouchMode="false"-->
+<!--            android:focusable="false"-->
+<!--            android:id="@+id/gridView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="25sp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:horizontalSpacing="1sp"-->
+<!--            android:numColumns="9"-->
+<!--            android:stretchMode="columnWidth"-->
+<!--            android:textAlignment="center"-->
+<!--            android:verticalSpacing="10sp" />-->
+
+    </LinearLayout>
 
 </FrameLayout>

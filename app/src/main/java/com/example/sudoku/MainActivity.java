@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import java.net.MalformedURLException;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnSinglePlayer, btnMultiPlayer, btnConnect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
