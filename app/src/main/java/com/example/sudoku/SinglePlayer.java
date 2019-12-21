@@ -3,6 +3,7 @@ package com.example.sudoku;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 
 
@@ -11,23 +12,16 @@ import android.widget.GridView;
  * status bar and navigation/system bar) with user interaction.
  */
 public class SinglePlayer extends AppCompatActivity {
-    private Sudoku sudoku;
-    private GridView gridView;
+    SudokuView sudokuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_player);
 
-        sudoku = new Sudoku();
-        sudoku.start();
-        try {
-            sudoku.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-
+        FrameLayout flSudoku = findViewById(R.id.flSudoku);
+        sudokuView = new SudokuView(this);
+        flSudoku.addView(sudokuView);
     }
+
 }
