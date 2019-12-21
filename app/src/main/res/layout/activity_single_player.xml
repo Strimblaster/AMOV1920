@@ -26,9 +26,9 @@
         android:id="@+id/n1"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:textSize="30dp"
         android:text="1"
-        app:layout_constraintBottom_toTopOf="@+id/n4"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/n2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/flSudoku" />
@@ -40,7 +40,7 @@
         android:textSize="30dp"
         android:text="2"
         app:layout_constraintBottom_toBottomOf="@+id/n1"
-        app:layout_constraintEnd_toEndOf="@+id/n3"
+        app:layout_constraintEnd_toStartOf="@+id/n3"
         app:layout_constraintStart_toEndOf="@+id/n1"
         app:layout_constraintTop_toTopOf="@+id/n1" />
 
@@ -48,23 +48,23 @@
         android:id="@+id/n3"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:textSize="30dp"
         android:text="3"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/n1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/n2"
-        app:layout_constraintTop_toTopOf="@+id/n1"/>
+        app:layout_constraintEnd_toStartOf="@+id/n4"
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
     <Button
         android:id="@+id/n4"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:textSize="30dp"
         android:text="4"
-        app:layout_constraintBottom_toTopOf="@+id/n7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/n1"
-        app:layout_constraintEnd_toStartOf="@+id/n5" />
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
+        app:layout_constraintStart_toEndOf="@+id/n3"
+        app:layout_constraintEnd_toStartOf="@+id/n5"
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
     <Button
         android:id="@+id/n5"
@@ -72,10 +72,10 @@
         android:layout_height="80dp"
         android:textSize="30dp"
         android:text="5"
-        app:layout_constraintBottom_toBottomOf="@+id/n4"
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n4"
         app:layout_constraintEnd_toStartOf="@+id/n6"
-        app:layout_constraintTop_toTopOf="@+id/n4" />
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
     <Button
         android:id="@+id/n6"
@@ -83,10 +83,10 @@
         android:layout_height="80dp"
         android:textSize="30dp"
         android:text="6"
-        app:layout_constraintBottom_toBottomOf="@+id/n5"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n5"
-        app:layout_constraintTop_toTopOf="@+id/n5" />
+        app:layout_constraintEnd_toStartOf="@+id/n7"
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
     <Button
         android:id="@+id/n7"
@@ -94,10 +94,10 @@
         android:layout_height="80dp"
         android:textSize="30dp"
         android:text="7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/n4"
-        app:layout_constraintEnd_toStartOf="@+id/n8" />
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
+        app:layout_constraintStart_toEndOf="@+id/n6"
+        app:layout_constraintEnd_toStartOf="@+id/n8"
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
     <Button
         android:id="@+id/n8"
@@ -105,10 +105,10 @@
         android:layout_height="80dp"
         android:textSize="30dp"
         android:text="8"
-        app:layout_constraintBottom_toBottomOf="@+id/n7"
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n7"
-        app:layout_constraintTop_toTopOf="@+id/n7"
-        app:layout_constraintEnd_toStartOf="@+id/n9"/>
+        app:layout_constraintEnd_toStartOf="@+id/n9"
+        app:layout_constraintTop_toTopOf="@+id/n1"/>
 
     <Button
         android:id="@+id/n9"
@@ -116,49 +116,57 @@
         android:layout_height="80dp"
         android:textSize="30dp"
         android:text="9"
-        app:layout_constraintBottom_toBottomOf="@+id/n8"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n8"
-        app:layout_constraintTop_toTopOf="@+id/n8" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/n1" />
 
-<!--    <Button-->
-<!--        android:id="@+id/btnNewGame"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/colorSinglePlayer"-->
-<!--        android:text="Novo Jogo"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
+    <TextView
+        android:id="@+id/pontos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Pontos:"
+        android:textColor="@color/colorWhite"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/lbTime"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/underline"-->
-<!--        android:gravity="center_horizontal|center_vertical"-->
-<!--        android:text="1:32"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/colorWhite"-->
-<!--        android:textDirection="firstStrongRtl"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/btnNewGame"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/btnNewGame"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/btnNewGame"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/lbPoints" />-->
+    <TextView
+        android:id="@+id/tempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="Tempo:"
+        android:textColor="@color/colorWhite"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lbTime" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/lbPoints"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/underline"-->
-<!--        android:gravity="center_horizontal|center_vertical"-->
-<!--        android:text="123"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/colorWhite"-->
-<!--        android:textDirection="firstStrongRtl"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/lbTime"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/btnNewGame" />-->
+    <TextView
+        android:id="@+id/lbPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="123"
+        android:textColor="@color/colorWhite"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pontos" />
 
+    <TextView
+        android:id="@+id/lbTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="1:23"
+        android:textColor="@color/colorWhite"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

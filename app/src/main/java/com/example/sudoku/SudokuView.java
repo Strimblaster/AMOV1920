@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class SudokuView extends View {
+public class SudokuView extends View  {
 
     int [][] board = {
             {0, 1, 0, 2, 0, 3, 0, 4, 0},
@@ -30,10 +31,20 @@ public class SudokuView extends View {
 
     public static final int BOARD_SIZE = 9;
     Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
+    Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
 
     public SudokuView(Context context) {
         super(context);
         createPaints();
+        n1 = (Button) findViewById(R.id.n1);
+        n2 = (Button) findViewById(R.id.n2);
+        n3 = (Button) findViewById(R.id.n3);
+        n4 = (Button) findViewById(R.id.n4);
+        n5 = (Button) findViewById(R.id.n5);
+        n6 = (Button) findViewById(R.id.n6);
+        n7 = (Button) findViewById(R.id.n7);
+        n8 = (Button) findViewById(R.id.n8);
+        n9 = (Button) findViewById(R.id.n9);
     }
 
     void createPaints() {
@@ -114,10 +125,11 @@ public class SudokuView extends View {
             int w = getWidth(), cellW = w/BOARD_SIZE;
             int h = getHeight(), cellH = h/BOARD_SIZE;
 
-            int cellX = px / cellW;
-            int cellY = py / cellH;
+            final int cellX = px / cellW;
+            final int cellY = py / cellH;
 
             board[cellY][cellX] = 5;
+
             invalidate();
             return true;
         }
@@ -129,4 +141,7 @@ public class SudokuView extends View {
         this.board = board;
         invalidate();
     }
+
+
+
 }
