@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:fontFamily="@font/roboto"
-        android:text="@string/btnJogar"
+        android:text="@string/title"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
         android:textSize="60sp" />
@@ -29,36 +29,36 @@
         tools:context=".MainActivity">
 
         <Button
-            android:id="@+id/btnSinglePlayer"
+            android:id="@+id/btnJogar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@color/colorSinglePlayer"
             android:fontFamily="@font/roboto"
             android:padding="10dp"
-            android:text="@string/btnPlay"
+            android:text="@string/btnJogar"
             android:textColor="@color/colorWhite"
             android:textSize="25sp"></Button>
 
         <Button
-            android:id="@+id/btnMultiPlayer"
+            android:id="@+id/btnProfile"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@color/colorMultiPlayer"
             android:padding="10dp"
-            android:text="@string/btnMultiplayer"
+            android:text="@string/btnProfile"
             android:textColor="@color/colorWhite"
             android:textSize="25sp"></Button>
 
         <Button
-            android:id="@+id/btnConnect"
+            android:id="@+id/btnHistorico"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@color/colorNetwork"
             android:padding="10dp"
-            android:text="@string/btnConnect"
+            android:text="@string/btnHistórico"
             android:textColor="@color/colorWhite"
             android:textSize="25sp"></Button>
     </LinearLayout>

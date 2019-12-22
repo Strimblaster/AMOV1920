@@ -5,58 +5,57 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
-import java.net.MalformedURLException;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnSinglePlayer, btnMultiPlayer, btnConnect;
+
+    private Button btnJogar, btnProfile, btnHistorico;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_menu);
 
-        btnSinglePlayer = findViewById(R.id.btnSinglePlayer);
-        btnMultiPlayer = findViewById(R.id.btnMultiPlayer);
-        btnConnect = findViewById(R.id.btnConnect);
+        btnJogar = findViewById(R.id.btnJogar);
+        btnProfile = findViewById(R.id.btnProfile);
+        btnHistorico = findViewById(R.id.btnHistorico);
 
-        btnSinglePlayer.setOnClickListener(new View.OnClickListener() {
+        btnJogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToSinglePlayer();
+                goToJogar();
             }
         });
-        btnMultiPlayer.setOnClickListener(new View.OnClickListener() {
+        btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToMultiPlayer();
+                goToProfile();
             }
         });
-        btnConnect.setOnClickListener(new View.OnClickListener() {
+        btnHistorico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToConnect();
+                goToHistorico();
             }
         });
 
     }
 
-    private void goToSinglePlayer() {
-        Intent intent = new Intent(this,  SinglePlayer.class);
+    private void goToJogar() {
+        Intent intent = new Intent(this,  Jogar.class);
+        System.out.println("ola");
         startActivity(intent);
     }
 
-    private void goToMultiPlayer() {
-        Intent intent = new Intent(this,  Multiplayer.class);
+    private void goToProfile() {
+        Intent intent = new Intent(this,  Profile.class);
         startActivity(intent);
     }
 
-    private void goToConnect() {
-        Intent intent = new Intent(this,  Connect.class);
+    private void goToHistorico() {
+        Intent intent = new Intent(this,  Historico.class);
         startActivity(intent);
     }
 }

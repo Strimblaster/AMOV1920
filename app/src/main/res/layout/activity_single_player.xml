@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".MainActivity">
+    tools:context=".SinglePlayer">
 
     <FrameLayout
         android:id="@+id/flSudoku"
@@ -31,7 +31,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/n2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flSudoku" />
+        app:layout_constraintTop_toBottomOf="@+id/flSudoku"
+        android:onClick="n1"/>
 
     <Button
         android:id="@+id/n2"
@@ -42,7 +43,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintEnd_toStartOf="@+id/n3"
         app:layout_constraintStart_toEndOf="@+id/n1"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n2" />
 
     <Button
         android:id="@+id/n3"
@@ -53,7 +55,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n2"
         app:layout_constraintEnd_toStartOf="@+id/n4"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n3" />
 
     <Button
         android:id="@+id/n4"
@@ -64,7 +67,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n3"
         app:layout_constraintEnd_toStartOf="@+id/n5"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n4" />
 
     <Button
         android:id="@+id/n5"
@@ -75,7 +79,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n4"
         app:layout_constraintEnd_toStartOf="@+id/n6"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n5" />
 
     <Button
         android:id="@+id/n6"
@@ -86,7 +91,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n5"
         app:layout_constraintEnd_toStartOf="@+id/n7"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n6"  />
 
     <Button
         android:id="@+id/n7"
@@ -97,7 +103,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n6"
         app:layout_constraintEnd_toStartOf="@+id/n8"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n7" />
 
     <Button
         android:id="@+id/n8"
@@ -108,7 +115,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n7"
         app:layout_constraintEnd_toStartOf="@+id/n9"
-        app:layout_constraintTop_toTopOf="@+id/n1"/>
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n8" />
 
     <Button
         android:id="@+id/n9"
@@ -119,7 +127,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/n1"
         app:layout_constraintStart_toEndOf="@+id/n8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/n1" />
+        app:layout_constraintTop_toTopOf="@+id/n1"
+        android:onClick="n9" />
 
     <TextView
         android:id="@+id/pontos"

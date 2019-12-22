@@ -223,5 +223,9 @@ class Grid {
     int getSize(){
         return size;
     }
+
+    void setCell(Cell cell){
+        grid[cell.getY()][cell.getX()] = cell;
+    }
 }
 

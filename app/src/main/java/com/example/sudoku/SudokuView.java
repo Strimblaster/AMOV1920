@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class SudokuView extends View {
+public class SudokuView extends View{
 
     Grid grid = new Grid(Difficulty.hard);
 
@@ -27,6 +27,7 @@ public class SudokuView extends View {
     public SudokuView(Context context) {
         super(context);
         createPaints();
+        selectedCell = null;
         n1 = (Button) findViewById(R.id.n1);
         n2 = (Button)  findViewById(R.id.n2);
         n3 = (Button)  findViewById(R.id.n3);
@@ -36,16 +37,6 @@ public class SudokuView extends View {
         n7 = (Button)  findViewById(R.id.n7);
         n8 = (Button)  findViewById(R.id.n8);
         n9 = (Button)  findViewById(R.id.n9);
-        selectedCell = null;
-
-        n1.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedCell != null) {
-                    selectedCell.setValue(1);
-                }
-            }
-        });
     }
 
     void createPaints() {
@@ -127,14 +118,36 @@ public class SudokuView extends View {
             final int col = (px / cellW);
             final int row = (py / cellH);
             System.out.println("Row: " + row + " COL: " + col);
-            if (!grid.getCell(row, col).isOriginal()) {
+            if (grid.getCell(row, col).getValue() == 0) {
                 selectedCell = grid.getCell(row, col);
+                selectedCell.setX(col);
+                selectedCell.setY(row);
             }
 
-            invalidate();
             return true;
         }
 
         return super.onTouchEvent(event);
     }
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//
+//            case R.id.n1:
+//                if (selectedCell != null) {
+//                    selectedCell.setValue(1);
+//                    grid.setCell(selectedCell);
+//                    selectedCell = null;
+//                    invalidate();
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+
+
+
+
 }

@@ -2,8 +2,13 @@
     <string name="app_name">Sudoku</string>
     <string name="title">Sudoku</string>
     <string name="btnPlay">Um jogador</string>
+    <string name="btnJogar">Jogar</string>
+    <string name="btnProfile">Perfil</string>
+    <string name="btnHistórico">Histórico</string>
     <string name="btnMultiplayer">Dois jogadores</string>
     <string name="btnConnect">Jogar em rede</string>
+    <string name="btnFoto">Carregar foto</string>
+
 
     <string name="title_activity_single_player">SinglePlayer</string>
     <string name="dummy_button">Um butão que nao serve para nada</string>
@@ -12,6 +17,8 @@
     <string name="title_activity_multiplayer">multiplayer</string>
 
     <string name="title_activity_connect">connect</string>
+    <string name="title_activity_jogar">Jogar</string>
+    <string name="title_activity_profile">Profile</string>
 
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="logo">Logo</string>
@@ -20,5 +27,6 @@
 <!--    ICONS FONTAWSOME-->
     <string name="fa_clock">&#xf017;</string>
     <string name="fa_points">&#xf005;</string>
+    <string name="btnGuardar">Guardar</string>
 
 </resources>

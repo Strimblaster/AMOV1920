@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnProfile"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="60sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColorHint="@color/colorWhite"
+        android:layout_marginTop="80dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            android:textColor="#FFFFFF"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorSinglePlayer"
+        android:fontFamily="@font/roboto"
+        android:padding="10dp"
+        android:text="@string/btnFoto"
+        android:textColor="@color/colorWhite"
+        android:textSize="25sp"></Button>
+
+    <FrameLayout
+        android:layout_height="200dp"
+        android:layout_width="200dp"
+        android:id="@+id/frPreview"
+        android:backgroundColor="@color/colorBackground"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center|bottom">
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorMultiPlayer"
+            android:fontFamily="@font/roboto"
+            android:padding="10dp"
+            android:text="@string/btnGuardar"
+            android:textColor="@color/colorWhite"
+            android:textSize="25sp">
+
+        </Button>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
