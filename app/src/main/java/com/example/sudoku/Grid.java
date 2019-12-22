@@ -1,5 +1,7 @@
 package com.example.sudoku;
 
+import android.os.SystemClock;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Random;
 
 class Grid {
     private Cell[][] grid;
@@ -25,6 +28,10 @@ class Grid {
         this.difficulty = difficulty;
         this.status = Status.unsolved;
         buildGrid();
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
     private void buildGrid() {
@@ -100,7 +107,7 @@ class Grid {
         return status == Status.solved;
     }
 
-    private Board toBoard() {
+    Board toBoard() {
         Board board = new Board();
         for (int i = 0; i < size ; i++) {
             for (int j = 0; j < size; j++) {
@@ -180,6 +187,26 @@ class Grid {
                 if (value > 0 && newHints.get(value)) {
                     newHints.put(value,false);
                 }
+            }
+        }
+        int trues;
+        if (getDifficulty() == Difficulty.easy){
+            trues = 7;
+        }else if (getDifficulty() == Difficulty.hard){
+            trues = 3;
+        }else if (getDifficulty() == Difficulty.medium){
+            trues = 5;
+        }else{
+            Random rnd = new Random(SystemClock.elapsedRealtime());
+            trues = rnd.nextInt(6)+1;
+        }
+        int counter = 0;
+        for (int i = 1; i <= size ; i++) {
+            if (newHints.get(i)){
+                counter++;
+            }
+            if (newHints.get(i) && counter > trues){
+                newHints.put(i,false);
             }
         }
         return  newHints;
