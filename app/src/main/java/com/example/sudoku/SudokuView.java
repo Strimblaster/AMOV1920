@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,27 +17,16 @@ import java.util.List;
 import java.util.Random;
 
 public class SudokuView extends View{
-
     Grid grid = new Grid(Difficulty.hard);
-
-    public static final int BOARD_SIZE = 9;
-    Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers;
-    Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
+    Paint paintMainLines, paintSubLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers, paintPossibles;
     Cell selectedCell;
+    private boolean hint;
 
     public SudokuView(Context context) {
         super(context);
         createPaints();
         selectedCell = null;
-        n1 = (Button) findViewById(R.id.n1);
-        n2 = (Button)  findViewById(R.id.n2);
-        n3 = (Button)  findViewById(R.id.n3);
-        n4 = (Button)  findViewById(R.id.n4);
-        n5 = (Button)  findViewById(R.id.n5);
-        n6 = (Button)  findViewById(R.id.n6);
-        n7 = (Button)  findViewById(R.id.n7);
-        n8 = (Button)  findViewById(R.id.n8);
-        n9 = (Button)  findViewById(R.id.n9);
+        hint = false;
     }
 
     void createPaints() {
@@ -48,8 +38,13 @@ public class SudokuView extends View{
         paintSubLines = new Paint(paintMainLines);
         paintSubLines.setStrokeWidth(3);
 
+        paintOriginalNumbers = new Paint(paintSubLines);
+        paintOriginalNumbers.setColor(Color.rgb(52, 152, 219));
+        paintOriginalNumbers.setTextSize(32);
+        paintOriginalNumbers.setTextAlign(Paint.Align.CENTER);
+
         paintMainNumbers = new Paint(paintSubLines);
-        paintMainNumbers.setColor(Color.rgb(52, 152, 219));
+        paintMainNumbers.setColor(Color.rgb(236, 240, 241));
         paintMainNumbers.setTextSize(32);
         paintMainNumbers.setTextAlign(Paint.Align.CENTER);
 
@@ -62,41 +57,68 @@ public class SudokuView extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Paint strokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint normalPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        int w = getWidth(), cellW = w / BOARD_SIZE;
-        int h = getHeight(), cellH = h / BOARD_SIZE;
+        int cellWidth = getWidth() / grid.getSize();
+        int cellHeight = getHeight() / grid.getSize();
 
-        for (int i = 0; i <= BOARD_SIZE; i++) {
-            canvas.drawLine(0, i * cellH, w, i * cellH, i % 3 == 0 ? paintMainLines : paintSubLines);
-            canvas.drawLine(i * cellW, 0, i * cellH, h, i % 3 == 0 ? paintMainLines : paintSubLines);
+        for (int row = 0; row < grid.getSize(); row++) {
+            for (int col = 0; col < grid.getSize() ; col++) {
+                Cell c = grid.getCell(row,col);
+                Rect rectangle = new Rect(col*cellWidth, row*cellHeight, (col+1)*cellWidth,  (row+1)*cellHeight);
+                strokePaint.setStyle(Paint.Style.STROKE);
+                strokePaint.setStrokeWidth(1f);
+                strokePaint.setColor(Color.WHITE);
+                canvas.drawRect(rectangle,strokePaint);
+                if(c.getValue() != 0 && !c.isOriginal() && !grid.isPossible(c)){
+                    errorPaint.setStyle(Paint.Style.FILL);
+                    errorPaint.setColor(Color.rgb(231, 76, 60));
+                    canvas.drawRect(rectangle, errorPaint);
+                }else{
+                    normalPaint.setStyle(Paint.Style.FILL);
+                    normalPaint.setColor(Color.rgb(51, 51, 51));
+                    canvas.drawRect(rectangle, normalPaint);
+                }
+                if(selectedCell != null) {
+                    if (c == selectedCell) {
+                        fillPaint.setStyle(Paint.Style.FILL);
+                        fillPaint.setColor(Color.rgb(91, 91, 91));
+                        canvas.drawRect(rectangle, fillPaint);
+                    }
+                }
+            }
         }
 
         if (grid == null)
             return;
 
-        paintMainNumbers.setTextSize(cellH / 2);
-        paintSmallNumbers.setTextSize(cellH / 4);
+        paintMainNumbers.setTextSize(cellHeight / 2);
+        paintOriginalNumbers.setTextSize(cellHeight / 2);
+        paintSmallNumbers.setTextSize(cellHeight / 4);
 
-        for (int r = 0; r < BOARD_SIZE; r++) {
-            for (int c = 0; c < BOARD_SIZE; c++) {
-                int n = grid.getValue(r, c);
-                if (n != 0) {
-                    int x = cellW / 2 + cellW * c; //fica no meio e anda de 1 em 1 cell
-                    int y = cellH / 2 + cellH * r + cellH / 6;
-
-                    canvas.drawText("" + n, x, y, paintMainNumbers);
+        for (int row = 0; row < grid.getSize(); row++) {
+            for (int col = 0; col < grid.getSize(); col++) {
+                Cell cell = grid.getCell(row,col);
+                int value = cell.getValue();
+                if (value != 0) {
+                    int x = cellWidth / 2 + cellWidth * col; //fica no meio e anda de 1 em 1 cell
+                    int y = cellHeight / 2 + cellHeight * row + cellHeight / 6;
+                    if (cell.isOriginal()){
+                        canvas.drawText("" + value, x, y, paintOriginalNumbers);
+                    }else {
+                        canvas.drawText("" + value, x, y, paintMainNumbers);
+                    }
                 } else {
-                    int x = cellW / 6 + cellW * c;
-                    int y = cellH / 6 + cellH * r;
+                    int x = cellWidth / 6 + cellWidth * col;
+                    int y = cellHeight / 6 + cellHeight * row;
                     for (int i = 1; i <= grid.getSize(); i++) {
-                        try {
-                            if (grid.getCellHints(r, c).get(i)) {
-                                int xp = x + (i - 1) % 3 * cellW / 3;
-                                int yp = y + (i - 1) / 3 * cellH / 3 + cellH / 9;
-                                canvas.drawText("" + i, xp, yp, paintSmallNumbers);
-                            }
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
+                        if (cell.getHint(i)) {
+                            int xp = x + (i - 1) % 3 * cellWidth / 3;
+                            int yp = y + (i - 1) / 3 * cellHeight / 3 + cellHeight / 9;
+                            canvas.drawText("" + i, xp, yp, paintSmallNumbers);
                         }
                     }
                 }
@@ -112,42 +134,28 @@ public class SudokuView extends View{
             int px = (int) event.getX();
             int py = (int) event.getY();
 
-            int w = getWidth(), cellW = w / BOARD_SIZE;
-            int h = getHeight(), cellH = h / BOARD_SIZE;
+            int w = getWidth();
+            int cellWidth = w / grid.getSize();
+            int h = getHeight();
+            int cellHeight = h / grid.getSize();
 
-            final int col = (px / cellW);
-            final int row = (py / cellH);
-            System.out.println("Row: " + row + " COL: " + col);
-            if (grid.getCell(row, col).getValue() == 0) {
-                selectedCell = grid.getCell(row, col);
-                selectedCell.setX(col);
-                selectedCell.setY(row);
+            final int col = (px / cellWidth);
+            final int row = (py / cellHeight);
+
+            Cell temp = grid.getCell(row, col);
+            if (!temp.isOriginal()) {
+                selectedCell = temp;
+                selectedCell.setCol(col);
+                selectedCell.setRow(row);
             }
-
+            invalidate();
             return true;
         }
-
         return super.onTouchEvent(event);
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//
-//            case R.id.n1:
-//                if (selectedCell != null) {
-//                    selectedCell.setValue(1);
-//                    grid.setCell(selectedCell);
-//                    selectedCell = null;
-//                    invalidate();
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
-
-
-
+    void newGame(){
+        this.grid = new Grid(Difficulty.random);
+        invalidate();
+    }
 }

@@ -6,8 +6,8 @@ public class Cell {
     private int value;
     private HashMap<Integer,Boolean> hints;
     private boolean isOriginal;
-    private int x;
-    private int y;
+    private int col;
+    private int row;
 
     public boolean isOriginal() {
         return isOriginal;
@@ -25,14 +25,14 @@ public class Cell {
         this.value = value;
         this.hints = generateHints();
         this.isOriginal = false;
-        this.x = -1;
-        this.y = -1;
+        this.col = -1;
+        this.row = -1;
     }
 
     private HashMap<Integer, Boolean> generateHints() {
         HashMap<Integer,Boolean> hashMap = new HashMap<>();
         for (int i = 1; i <= 9; i++) {
-            hashMap.put((i),true);
+            hashMap.put((i),false);
         }
         return hashMap;
     }
@@ -41,27 +41,36 @@ public class Cell {
         return value;
     }
 
-    public HashMap<Integer, Boolean> getHints() {
-        return hints;
+    public boolean addHint(int value){
+        if (value > 0 && value <= 9) {
+            return hints.put(value, true);
+        }
+        return false;
+    }
+    public boolean getHint(int value){
+        return hints.get(value);
     }
 
-    public void setHints(HashMap<Integer, Boolean> newHints) {
-        this.hints = newHints;
+    public boolean removeHint (int value){
+        if (value > 0 && value <= 9) {
+            return hints.put(value, false);
+        }
+        return false;
     }
 
-    public int getX(){
-        return x;
+    public int getCol(){
+        return col;
     }
 
-    public int getY(){
-        return y;
+    public int getRow(){
+        return row;
     }
 
-    public void setX(int x){
-        this.x = x;
+    public void setCol(int x){
+        this.col = x;
     }
 
-    public void setY(int y){
-        this.y = y;
+    public void setRow(int y){
+        this.row = y;
     }
 }

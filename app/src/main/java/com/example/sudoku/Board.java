@@ -24,7 +24,9 @@ class Board implements Serializable {
         for (int i = 0; i <size ; i++) {
             for (int j = 0; j <size ; j++) {
                 Cell cell = new Cell(getPos(i,j));
-                cell.setOriginal();
+                if (cell.getValue() != 0){
+                    cell.setOriginal();
+                }
                 grid[i][j]  = cell;
             }
         }
