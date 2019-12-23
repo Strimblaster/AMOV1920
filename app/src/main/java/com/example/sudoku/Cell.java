@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Cell {
     private int value;
-    private HashMap<Integer,Boolean> hints;
+    private HashMap<Integer,Boolean> notes;
     private boolean isOriginal;
     private int col;
     private int row;
@@ -21,12 +21,12 @@ public class Cell {
         isOriginal = true;
     }
 
-    Cell(int value) {
+    Cell(int value,int row, int col) {
         this.value = value;
-        this.hints = generateHints();
+        this.notes = generateHints();
         this.isOriginal = false;
-        this.col = -1;
-        this.row = -1;
+        this.col = col;
+        this.row = row;
     }
 
     private HashMap<Integer, Boolean> generateHints() {
@@ -41,19 +41,19 @@ public class Cell {
         return value;
     }
 
-    public boolean addHint(int value){
+    public boolean addNote(int value){
         if (value > 0 && value <= 9) {
-            return hints.put(value, true);
+            return notes.put(value, true);
         }
         return false;
     }
-    public boolean getHint(int value){
-        return hints.get(value);
+    public boolean getNote(int value){
+        return notes.get(value);
     }
 
-    public boolean removeHint (int value){
+    public boolean removeNote (int value){
         if (value > 0 && value <= 9) {
-            return hints.put(value, false);
+            return notes.put(value, false);
         }
         return false;
     }
@@ -72,5 +72,33 @@ public class Cell {
 
     public void setRow(int y){
         this.row = y;
+    }
+
+    public void clear() {
+        this.value = 0;
+        for (int i = 1; i <=9 ; i++) {
+            removeNote(i);
+        }
+    }
+    public boolean hasNotes(){
+        for (int i = 1; i <=9 ; i++) {
+            if (getNote(i)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean inSquare(Cell selectedCell) {
+        int start_row = this.row / 3;
+        int start_col = this.col / 3 ;
+        int selected_start_row = selectedCell.getRow() / 3;
+        int selected_start_col = selectedCell.getCol() / 3;
+        System.out.println("Selected : "+selected_start_row +" "+selected_start_col);
+        System.out.println("Other: "+start_row +" "+start_col);
+        if (start_row == selected_start_row && start_col == selected_start_col ){
+                return true;
+        }
+        return false;
     }
 }

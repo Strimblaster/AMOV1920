@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorSinglePlayer">#3498db</color>
-    <color name="colorMultiPlayer">#e67e22</color>
-    <color name="colorNetwork">#16a085</color>
-    <color name="colorRed">#e74c3c</color>
-    <color name="colorBackground">#333333</color>
-    <color name="colorBackgroundLight">#5B5B5B</color>
-    <color name="colorWhite">#ecf0f1</color>
+    <color name="colorBlue">#0288d1</color>
+    <color name="colorOrange">#ffa000</color>
+    <color name="colorCian">#00796b</color>
+    <color name="colorRed">#e64a19</color>
+    <color name="colorWhite">#fafafa</color>
+    <color name="colorBackgroundDark">#000000</color>
+    <color name="colorBackground">#212121</color>
+    <color name="colorBackgroundRelated">#353535</color>
+    <color name="colorBackgroundLight">#484848</color>
+
+
+
 
 </resources>

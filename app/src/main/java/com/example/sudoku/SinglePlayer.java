@@ -2,11 +2,16 @@ package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import java.sql.Time;
 
 
 /**
@@ -16,15 +21,23 @@ import android.widget.GridView;
 public class SinglePlayer extends AppCompatActivity {
     SudokuView sudokuView;
     Button n1, n2, n3, n4, n5, n6, n7, n8, n9, newGame;
+
+    ImageButton btnNotes, btnDelete;
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, Jogar.class));
+        overridePendingTransition(R.anim.slide_left,R.anim.slide_out_right);
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_player);
-
         FrameLayout flSudoku = findViewById(R.id.flSudoku);
         sudokuView = new SudokuView(this);
         flSudoku.addView(sudokuView);
-
         n1 = findViewById(R.id.n1);
         n2 =  findViewById(R.id.n2);
         n3 =  findViewById(R.id.n3);
@@ -41,6 +54,32 @@ public class SinglePlayer extends AppCompatActivity {
                 sudokuView.newGame();
             }
         });
+        btnDelete = findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sudokuView.selectedCell != null) {
+                    sudokuView.selectedCell.clear();
+                    sudokuView.grid.setCell(sudokuView.selectedCell);
+                    sudokuView.invalidate();
+                }
+            }
+        });
+        btnNotes = findViewById(R.id.btnNotes);
+        btnNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sudokuView.selectedCell != null ) {
+                    if (!sudokuView.isNotes()) {
+                        sudokuView.enableNotes();
+                        sudokuView.invalidate();
+                    } else {
+                        sudokuView.disableNotes();
+                        sudokuView.invalidate();
+                    }
+                }
+            }
+        });
 
         setOnClick(n1,1);
         setOnClick(n2,2);
@@ -51,6 +90,43 @@ public class SinglePlayer extends AppCompatActivity {
         setOnClick(n7,7);
         setOnClick(n8,8);
         setOnClick(n9,9);
+
+
+        Thread thread = new Thread(){
+            TextView tvTime = findViewById(R.id.tvTime);
+            private static final int second = 1000;
+            private int seconds;
+            private int minutes;
+            public void run(){
+                while (true) {
+                    try {
+                        Thread.sleep(second);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (seconds < 59) {
+                                    seconds++;
+                                } else {
+                                    seconds = 0;
+                                    minutes++;
+                                }
+                                if (minutes > 60) {
+                                    return;
+                                }
+                                if(minutes > 0) {
+                                    tvTime.setText(minutes + "m " + seconds+"s");
+                                }else{
+                                    tvTime.setText(seconds+"s");
+                                }
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
     }
 
 
@@ -59,7 +135,11 @@ public class SinglePlayer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (sudokuView.selectedCell != null) {
-                    sudokuView.selectedCell.setValue(value);
+                    if(!sudokuView.isNotes()) {
+                        sudokuView.selectedCell.setValue(value);
+                    }else if (sudokuView.grid.canNote(sudokuView.selectedCell,value)){
+                        sudokuView.selectedCell.addNote(value);
+                    }
                     sudokuView.grid.setCell(sudokuView.selectedCell);
                     sudokuView.invalidate();
                 }
@@ -67,70 +147,5 @@ public class SinglePlayer extends AppCompatActivity {
         });
     }
 
-//    public void n1(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(1);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//
-//    public void n2(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(2);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//
-//    public void n3(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(3);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n4(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(4);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n5(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(5);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n6(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(6);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n7(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(7);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n8(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(8);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
-//    public void n9(View view) {
-//        if (sudokuView.selectedCell != null) {
-//            sudokuView.selectedCell.setValue(9);
-//            sudokuView.grid.setCell(sudokuView.selectedCell);
-//            sudokuView.invalidate();
-//        }
-//    }
 
 }

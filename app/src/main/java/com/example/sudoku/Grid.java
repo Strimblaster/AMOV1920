@@ -153,64 +153,34 @@ class Grid {
         return solution.getSolution() == toBoard().getBoard();
     }
 
-//    HashMap<Integer,Boolean> getCellHints(int row, int col){
-//        if(row > 9 || row < 0){
-//            throw new IndexOutOfBoundsException();
-//        }
-//        if (col > 9 || col < 0){
-//            throw  new  IndexOutOfBoundsException();
-//        }
-//        HashMap<Integer,Boolean> newHints = new HashMap<>();
-//        for (int i = 1; i <size+1 ; i++) {
-//            newHints.put(i,true);
-//        }
-//        // linhas - Row
-//        for (int i = 0; i < size; i++) {
-//            int value = grid[row][i].getValue();
-//            if (value > 0 && newHints.get(value)) {
-//                newHints.put(value,false);
-//            }
-//        }
-//        // colunas - cols
-//        for (int i = 0; i < size; i++) {
-//            int value = grid[i][col].getValue();
-//            if (value > 0 && newHints.get(value)) {
-//                newHints.put(value,false);
-//            }
-//        }
-//        //Quadrado
-//        int start_row = row/3;
-//        int start_col = col/3;
-//        for (int i = start_row*3; i < (start_row*3) + 3 ; i++) {
-//            for (int j = start_col*3; j <(start_col*3) +3 ; j++) {
-//                int value = grid[i][j].getValue();
-//                if (value > 0 && newHints.get(value)) {
-//                    newHints.put(value,false);
-//                }
-//            }
-//        }
-//        int trues;
-//        if (getDifficulty() == Difficulty.easy){
-//            trues = 7;
-//        }else if (getDifficulty() == Difficulty.hard){
-//            trues = 3;
-//        }else if (getDifficulty() == Difficulty.medium){
-//            trues = 5;
-//        }else{
-//            Random rnd = new Random(SystemClock.elapsedRealtime());
-//            trues = rnd.nextInt(6)+1;
-//        }
-//        int counter = 0;
-//        for (int i = 1; i <= size ; i++) {
-//            if (newHints.get(i)){
-//                counter++;
-//            }
-//            if (newHints.get(i) && counter > trues){
-//                newHints.put(i,false);
-//            }
-//        }
-//        return  newHints;
-//    }
+    boolean canNote(Cell cell, int note){
+            int row = cell.getRow();
+            int col = cell.getCol();
+            int value =  note;
+            // linhas - Row
+            for (int r = 0; r < getSize(); r++) {
+                if (value == grid[r][col].getValue() && r != row) {
+                    return false;
+                }
+            }
+            // colunas - cols
+            for (int c = 0; c < getSize(); c++) {
+                if (value == grid[row][c].getValue() && c != col) {
+                    return false;
+                }
+            }
+            //Quadrado
+            int start_row = row/3;
+            int start_col = col/3;
+            for (int i = start_row*3; i < (start_row*3) + 3 ; i++) {
+                for (int j = start_col*3; j <(start_col*3) +3 ; j++) {
+                    if (value == grid[i][j].getValue() && (i != row && j != col)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
     boolean isPossible(Cell cell){
         int row = cell.getRow();

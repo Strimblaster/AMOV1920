@@ -12,7 +12,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnJogar, btnProfile, btnHistorico;
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,37 +28,27 @@ public class MainActivity extends AppCompatActivity {
         btnJogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToJogar();
+                Intent intent = new Intent(MainActivity.this, Jogar.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+                finish();
             }
         });
+
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToProfile();
+                Intent intent = new Intent(MainActivity.this,  Profile.class);
+                startActivity(intent);
             }
         });
         btnHistorico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToHistorico();
+                Intent intent = new Intent(MainActivity.this,  Historico.class);
+                startActivity(intent);
             }
         });
 
-    }
-
-    private void goToJogar() {
-        Intent intent = new Intent(this,  Jogar.class);
-        System.out.println("ola");
-        startActivity(intent);
-    }
-
-    private void goToProfile() {
-        Intent intent = new Intent(this,  Profile.class);
-        startActivity(intent);
-    }
-
-    private void goToHistorico() {
-        Intent intent = new Intent(this,  Historico.class);
-        startActivity(intent);
     }
 }
