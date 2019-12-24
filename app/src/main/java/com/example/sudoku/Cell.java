@@ -75,9 +75,11 @@ public class Cell {
     }
 
     public void clear() {
-        this.value = 0;
-        for (int i = 1; i <=9 ; i++) {
-            removeNote(i);
+        if (!isOriginal) {
+            this.value = 0;
+            for (int i = 1; i <= 9; i++) {
+                removeNote(i);
+            }
         }
     }
     public boolean hasNotes(){
@@ -94,8 +96,6 @@ public class Cell {
         int start_col = this.col / 3 ;
         int selected_start_row = selectedCell.getRow() / 3;
         int selected_start_col = selectedCell.getCol() / 3;
-        System.out.println("Selected : "+selected_start_row +" "+selected_start_col);
-        System.out.println("Other: "+start_row +" "+start_col);
         if (start_row == selected_start_row && start_col == selected_start_col ){
                 return true;
         }

@@ -7,16 +7,6 @@ public class Sudoku extends Thread implements Serializable {
 
     public Sudoku()  { }
 
-//        HashMap<Integer,Boolean> hashMap =  grid.getCellHints(3,7);
-//        Iterator iterator = hashMap.entrySet().iterator();
-//        System.out.println("Hints: ");
-//        while (iterator.hasNext()) {
-//            Map.Entry<Integer,Boolean> me2 = (Map.Entry) iterator.next();
-//           if (me2.getValue().booleanValue()){
-//               System.out.println(me2.getKey()+"");
-//           }
-//        }
-
     public Integer[] getList(){
         int size = grid.getSize();
         Integer list[] = new Integer[size * size] ;

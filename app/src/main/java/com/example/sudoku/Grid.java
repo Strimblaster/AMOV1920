@@ -1,6 +1,5 @@
 package com.example.sudoku;
 
-import android.os.SystemClock;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -12,8 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Random;
 
 class Grid {
     private Cell[][] grid;
@@ -150,7 +147,7 @@ class Grid {
 
 
     boolean isCorrect(){
-        return solution.getSolution() == toBoard().getBoard();
+        return solution.getBoard() == toBoard().getBoard();
     }
 
     boolean canNote(Cell cell, int note){
@@ -229,6 +226,57 @@ class Grid {
 
     void setCell(Cell cell){
         grid[cell.getRow()][cell.getCol()] = cell;
+    }
+
+    void resetGrid(){
+        for (int row = 0; row < getSize() ; row++) {
+            for (int col = 0; col < getSize(); col++) {
+                grid[row][col].clear();
+            }
+        }
+    }
+
+    boolean isRowCompleted(Cell cell){
+        int[][] sol = solution.getBoard();
+        int dif = 0;
+        for (int col = 0; col < getSize() ; col++) {
+            if (getCell(cell.getRow(),col).getValue() != 0){
+                if(sol[cell.getRow()][col] != getCell(cell.getRow(),col).getValue()){
+                    dif++;
+                }
+            }
+        }
+        return dif == 0;
+    }
+
+    boolean isColCompleted(Cell cell){
+        int[][] sol = solution.getBoard();
+        int dif = 0;
+        for (int row = 0; row < getSize() ; row++) {
+            if (getCell(row,cell.getCol()).getValue() != 0){
+                if(sol[row][cell.getCol()] != getCell(row,cell.getCol()).getValue()){
+                    dif++;
+                }
+            }
+        }
+        return dif == 0;
+    }
+
+    boolean isSquareCompleted(Cell cell){
+        int[][] sol = solution.getBoard();
+        int dif = 0;
+        int start_col = cell.getCol()/3;
+        int start_row = cell.getRow()/3;
+        for (int row = start_row; row < 3; row++) {
+            for (int col = start_col; col < 3; col++) {
+                if (getCell(row,col).getValue() != 0){
+                    if(sol[row][col] != getCell(row,col).getValue()){
+                        dif++;
+                    }
+                }
+            }
+        }
+        return dif == 0;
     }
 }
 

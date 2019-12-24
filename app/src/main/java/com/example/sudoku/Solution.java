@@ -15,7 +15,7 @@ public class Solution {
         return difficulty;
     }
 
-    public int[][] getSolution() {
+    public int[][] getBoard() {
         return solution;
     }
 

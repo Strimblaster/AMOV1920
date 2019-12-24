@@ -24,7 +24,7 @@
     <string name="logo">Logo</string>
 
 
-<!--    ICONS FONTAWSOME-->
+    <!--    ICONS FONTAWSOME-->
     <string name="fa_clock">&#xf017;</string>
     <string name="fa_points">&#xf005;</string>
     <string name="btnGuardar">Guardar</string>

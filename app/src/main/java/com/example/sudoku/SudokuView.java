@@ -2,33 +2,25 @@ package com.example.sudoku;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class SudokuView extends View{
     private boolean notes;
-    Grid grid = new Grid(Difficulty.hard);
+    Grid grid;
     Paint paintMainLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers;
     Paint strokePaint, errorPaint, selectedPaint, notesPaint,backgroundPaint, relatedPaint;
     Cell selectedCell;
 
 
-    public SudokuView(Context context) {
+    public SudokuView(Context context, Difficulty difficulty) {
         super(context);
         createPaints();
         selectedCell = null;
         notes = false;
+        grid = new Grid(difficulty);
     }
 
     void createPaints() {
@@ -95,7 +87,7 @@ public class SudokuView extends View{
                 if(selectedCell != null){
                     if((selectedCell.getCol() == c.getCol() || selectedCell.getRow() == c.getRow() || c.inSquare(selectedCell))){
                         canvas.drawRect(rectangle, relatedPaint);
-                    }else {
+                    } else {
                         canvas.drawRect(rectangle, backgroundPaint);
                     }
                 }else {
@@ -103,11 +95,27 @@ public class SudokuView extends View{
                 }
 
                 if (selectedCell != null) {
-                     if (c.getValue() != 0 && !c.isOriginal() && !grid.isPossible(c)) {
+                    if(c.getValue() != 0 && !c.isOriginal() && !grid.isPossible(c)){
                         canvas.drawRect(rectangle, errorPaint);
+                        final Cell temp = selectedCell;
+                        Thread thread = new Thread(){
+                            private static final int time = 3000;
+                            public void run(){
+                                try {
+                                    Thread.sleep(time);
+                                    if(!grid.isPossible(selectedCell)) {
+                                        temp.clear();
+                                    }
+                                    invalidate();
+                                    } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+                        thread.start();
                     }else if (c == selectedCell && isNotes()) {
                         canvas.drawRect(rectangle, notesPaint);
-                    }else if (c == selectedCell){
+                    } else if (c == selectedCell){
                         canvas.drawRect(rectangle, selectedPaint);
                     }
                 }
@@ -131,7 +139,7 @@ public class SudokuView extends View{
             for (int col = 0; col < grid.getSize(); col++) {
                 Cell cell = grid.getCell(row,col);
                 int value = cell.getValue();
-                if (value != 0 && !cell.hasNotes()) {
+                if (value != 0 ) {
                     int x = cellWidth / 2 + cellWidth * col; //fica no meio e anda de 1 em 1 cell
                     int y = cellHeight / 2 + cellHeight * row + cellHeight / 6;
                     if (cell.isOriginal()){
@@ -140,7 +148,6 @@ public class SudokuView extends View{
                         canvas.drawText("" + value, x, y, paintMainNumbers);
                     }
                 } else {
-
                     int x = cellWidth / 6 + cellWidth* col;
                     int y = cellHeight / 6 + cellHeight* row;
                     for (int i = 1; i <= grid.getSize(); i++) {
@@ -183,11 +190,6 @@ public class SudokuView extends View{
         return super.onTouchEvent(event);
     }
 
-    void newGame(){
-        this.grid = new Grid(Difficulty.random);
-        invalidate();
-    }
-
     void  enableNotes(){
         this.notes = true;
     }
@@ -197,4 +199,5 @@ public class SudokuView extends View{
     boolean isNotes(){
         return  this.notes;
     }
+
 }
