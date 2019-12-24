@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 class Grid {
     private Cell[][] grid;
@@ -51,6 +52,7 @@ class Grid {
 
                         Board board = gson.fromJson(new BufferedReader(new InputStreamReader((conn.getInputStream()))), Board.class);
                         grid = board.toGrid();
+                        solve();
                         conn.disconnect();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -63,46 +65,45 @@ class Grid {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        solve();
     }
 
-    boolean validate(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Gson gson = new Gson();
-                    URL api = new URL(url+"validate");
-                    Board board = toBoard();
-                    String json = gson.toJson(board);
-                    HttpURLConnection conn = (HttpURLConnection) api.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json; utf-8");
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setDoOutput(true);
-                    conn.getOutputStream().write(json.getBytes("utf-8"), 0, json.getBytes("utf-8").length);
-                    InputStream inputStream = conn.getInputStream();
-                    byte[] b = new byte[1000];
-                    int read = inputStream.read(b);
-                    String json1 = new String(b, 0, read);
-                    JsonParser parser = new JsonParser();
-                    JsonObject o = parser.parse(json1).getAsJsonObject();
-                    status = Status.valueOf(o.get("status").toString().replace("\"", ""));
-                    conn.disconnect();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return status == Status.solved;
-    }
+//    boolean validate(){
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Gson gson = new Gson();
+//                    URL api = new URL(url+"validate");
+//                    Board board = toBoard();
+//                    String json = gson.toJson(board);
+//                    HttpURLConnection conn = (HttpURLConnection) api.openConnection();
+//                    conn.setRequestMethod("POST");
+//                    conn.setRequestProperty("Content-Type", "application/json; utf-8");
+//                    conn.setRequestProperty("Accept", "application/json");
+//                    conn.setDoOutput(true);
+//                    conn.getOutputStream().write(json.getBytes("utf-8"), 0, json.getBytes("utf-8").length);
+//                    InputStream inputStream = conn.getInputStream();
+//                    byte[] b = new byte[1000];
+//                    int read = inputStream.read(b);
+//                    String json1 = new String(b, 0, read);
+//                    JsonParser parser = new JsonParser();
+//                    JsonObject o = parser.parse(json1).getAsJsonObject();
+//                    status = Status.valueOf(o.get("status").toString().replace("\"", ""));
+//                    conn.disconnect();
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        return status == Status.solved;
+//    }
 
     Board toBoard() {
         Board board = new Board();
@@ -114,7 +115,8 @@ class Grid {
         return board;
     }
 
-    void solve(){
+    private void solve(){
+        solution = new Solution();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,14 +124,28 @@ class Grid {
                     Gson gson = new Gson();
                     URL api = new URL(url+"solve");
                     Board board = toBoard();
-                    String json = gson.toJson(board);
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    String json = gson.toJson(board.getBoard());
+
+                    stringBuilder.append(URLEncoder.encode("board", "UTF-8"));
+                    stringBuilder.append("=");
+                    stringBuilder.append(URLEncoder.encode(String.valueOf(json), "UTF-8"));
+                    byte[] bytes = stringBuilder.toString().getBytes("UTF-8");
+
                     HttpURLConnection conn = (HttpURLConnection) api.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json; utf-8");
-                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
                     conn.setDoOutput(true);
-                    conn.getOutputStream().write(json.getBytes("utf-8"), 0, json.getBytes("utf-8").length);
-                    solution = gson.fromJson(new BufferedReader(new InputStreamReader((conn.getInputStream()))), Solution.class);
+                    conn.getOutputStream().write(bytes);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    solution = gson.fromJson(in, Solution.class);
+                    for (int i = 0; i < getSize(); i++) {
+                        for (int j = 0; j < getSize(); j++) {
+                            System.out.print(solution.getBoard()[i][j]+" ");
+                        }
+                        System.out.println();
+                    }
                     conn.disconnect();
 
                 } catch (IOException e) {
@@ -147,7 +163,16 @@ class Grid {
 
 
     boolean isCorrect(){
-        return solution.getBoard() == toBoard().getBoard();
+        int[][] sol = solution.getBoard();
+        int dif = 0;
+        for (int row = 0; row < getSize(); row++) {
+            for (int col = 0; col <getSize() ; col++) {
+                if(sol[row][col] != getValue(row,col)){
+                    dif++;
+                }
+            }
+        }
+        return dif == 0;
     }
 
     boolean canNote(Cell cell, int note){
@@ -240,7 +265,7 @@ class Grid {
         int[][] sol = solution.getBoard();
         int dif = 0;
         for (int col = 0; col < getSize() ; col++) {
-            if (getCell(cell.getRow(),col).getValue() != 0){
+            if (!getCell(cell.getRow(),col).isOriginal()){
                 if(sol[cell.getRow()][col] != getCell(cell.getRow(),col).getValue()){
                     dif++;
                 }
@@ -253,7 +278,7 @@ class Grid {
         int[][] sol = solution.getBoard();
         int dif = 0;
         for (int row = 0; row < getSize() ; row++) {
-            if (getCell(row,cell.getCol()).getValue() != 0){
+            if (!getCell(row,cell.getCol()).isOriginal()){
                 if(sol[row][cell.getCol()] != getCell(row,cell.getCol()).getValue()){
                     dif++;
                 }
@@ -267,12 +292,10 @@ class Grid {
         int dif = 0;
         int start_col = cell.getCol()/3;
         int start_row = cell.getRow()/3;
-        for (int row = start_row; row < 3; row++) {
-            for (int col = start_col; col < 3; col++) {
-                if (getCell(row,col).getValue() != 0){
-                    if(sol[row][col] != getCell(row,col).getValue()){
-                        dif++;
-                    }
+        for (int row = start_row*3; row <(start_row *3)+ 3; row++) {
+            for (int col = start_col*3; col < (start_col*3)+3; col++) {
+                if(sol[row][col] != getCell(row,col).getValue()){
+                    dif++;
                 }
             }
         }

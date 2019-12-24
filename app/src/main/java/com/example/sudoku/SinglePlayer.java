@@ -45,8 +45,10 @@ public class SinglePlayer extends AppCompatActivity {
         difficulty = (Difficulty) getIntent().getSerializableExtra("Difficulty");
         sudokuView = new SudokuView(this, difficulty);
         flSudoku.addView(sudokuView);
+
         this.erros = 0;
         this.points = 0;
+
         n1 = findViewById(R.id.n1);
         n2 =  findViewById(R.id.n2);
         n3 =  findViewById(R.id.n3);
@@ -183,13 +185,13 @@ public class SinglePlayer extends AppCompatActivity {
 
     private void validate() {
         if (sudokuView.grid.isColCompleted(sudokuView.selectedCell)){
-            points = sudokuView.grid.getDifficulty().getPoints() * 2;
+            points += sudokuView.grid.getDifficulty().getPoints() * 2;
         }
         if (sudokuView.grid.isRowCompleted(sudokuView.selectedCell)){
-            points = sudokuView.grid.getDifficulty().getPoints() * 2;
+            points += sudokuView.grid.getDifficulty().getPoints() * 2;
         }
         if (sudokuView.grid.isSquareCompleted(sudokuView.selectedCell)){
-            points = sudokuView.grid.getDifficulty().getPoints() * 3;
+            points += sudokuView.grid.getDifficulty().getPoints() * 3;
         }
         if(erros >= sudokuView.grid.getDifficulty().getErros()){
             Intent intent = new Intent(this,  Result.class);
