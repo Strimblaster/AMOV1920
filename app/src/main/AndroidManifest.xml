@@ -4,6 +4,11 @@
     package="com.example.sudoku">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-feature android:name="android.hardware.camera.front" />
 
     <application
         android:allowBackup="true"
@@ -14,23 +19,23 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Result"
+            android:name=".Core.Result"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Resultado"
             android:theme="@style/FullscreenTheme"
             />
         <activity
-            android:name=".Connect"
+            android:name=".M3_MultiplayerLan.Connect"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_connect"
             android:theme="@style/FullscreenTheme" />
         <activity
-            android:name=".Multiplayer"
+            android:name=".M2_MultiPlayerLocal.Multiplayer"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_multiplayer"
             android:theme="@style/FullscreenTheme" />
         <activity
-            android:name=".SinglePlayer"
+            android:name=".M1_SinglePlayer.SinglePlayer"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_single_player"
             android:theme="@style/FullscreenTheme" />

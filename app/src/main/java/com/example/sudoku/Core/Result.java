@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.Core;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.sudoku.Jogar;
+import com.example.sudoku.R;
 
 public class Result extends AppCompatActivity {
     TextView tvTitle, tvMessage;

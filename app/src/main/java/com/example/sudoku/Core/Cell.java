@@ -1,8 +1,8 @@
-package com.example.sudoku;
+package com.example.sudoku.Core;
 
 import java.util.HashMap;
 
-public class Cell {
+class Cell {
     private int value;
     private HashMap<Integer,Boolean> notes;
     private boolean isOriginal;
@@ -75,13 +75,14 @@ public class Cell {
     }
 
     public void clear() {
-        if (!isOriginal) {
+        if (!isOriginal()) {
             this.value = 0;
             for (int i = 1; i <= 9; i++) {
                 removeNote(i);
             }
         }
     }
+
     public boolean hasNotes(){
         for (int i = 1; i <=9 ; i++) {
             if (getNote(i)){

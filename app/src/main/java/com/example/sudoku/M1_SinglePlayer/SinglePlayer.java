@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.M1_SinglePlayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.sql.Time;
+import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.Jogar;
+import com.example.sudoku.R;
+import com.example.sudoku.Core.Result;
+import com.example.sudoku.Core.SudokuView;
 
 
 /**
@@ -62,13 +65,13 @@ public class SinglePlayer extends AppCompatActivity {
         tvPoints = findViewById(R.id.tvPoints);
         newGame = findViewById(R.id.newGame);
 
-        tvErros.setText(erros+"/"+sudokuView.grid.getDifficulty().getErros());
+        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
         tvPoints.setText(""+points);
 
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sudokuView.grid.resetGrid();
+                sudokuView.getGrid().resetGrid();
                 resetValues();
                 sudokuView.invalidate();
             }
@@ -77,9 +80,9 @@ public class SinglePlayer extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sudokuView.selectedCell != null) {
-                    sudokuView.selectedCell.clear();
-                    sudokuView.grid.setCell(sudokuView.selectedCell);
+                if (sudokuView.getSelectedCell() != null) {
+                    sudokuView.clearSelectedCell();
+                    sudokuView.getGrid().setCell(sudokuView.getSelectedCell());
                     sudokuView.invalidate();
                 }
             }
@@ -88,7 +91,7 @@ public class SinglePlayer extends AppCompatActivity {
         btnNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sudokuView.selectedCell != null ) {
+                if(sudokuView.getSelectedCell() != null ) {
                     if (!sudokuView.isNotes()) {
                         sudokuView.enableNotes();
                         sudokuView.invalidate();
@@ -152,7 +155,7 @@ public class SinglePlayer extends AppCompatActivity {
         this.minutes = 0;
         this.seconds = 0;
         this.points = 0;
-        tvErros.setText(erros+"/"+sudokuView.grid.getDifficulty().getErros());
+        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
         tvPoints.setText(""+points);
     }
 
@@ -161,20 +164,20 @@ public class SinglePlayer extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sudokuView.selectedCell != null) {
+                if (sudokuView.getSelectedCell() != null) {
                     if(!sudokuView.isNotes()) {
-                        sudokuView.selectedCell.setValue(value);
-                        if (!sudokuView.grid.isPossible(sudokuView.selectedCell)){
+                        sudokuView.setValueSelectedCell(value);
+                        if (!sudokuView.getGrid().isPossible(sudokuView.getSelectedCell())){
                             erros++;
-                            points -= sudokuView.grid.getDifficulty().getPoints() * 4;
-                            tvErros.setText(erros+"/"+sudokuView.grid.getDifficulty().getErros());
+                            points -= sudokuView.getGrid().getDifficulty().getPoints() * 4;
+                            tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
                         }else{
-                            points += sudokuView.grid.getDifficulty().getPoints();
+                            points += sudokuView.getGrid().getDifficulty().getPoints();
                         }
-                    }else if (sudokuView.grid.canNote(sudokuView.selectedCell,value)){
-                        sudokuView.selectedCell.addNote(value);
+                    }else if (sudokuView.getGrid().canNote(sudokuView.getSelectedCell(),value)){
+                        sudokuView.addNoteSelectedCell(value);
                     }
-                    sudokuView.grid.setCell(sudokuView.selectedCell);
+                    sudokuView.getGrid().setCell(sudokuView.getSelectedCell());
                     validate();
                     tvPoints.setText(""+points);
                     sudokuView.invalidate();
@@ -184,24 +187,24 @@ public class SinglePlayer extends AppCompatActivity {
     }
 
     private void validate() {
-        if (sudokuView.grid.isColCompleted(sudokuView.selectedCell)){
-            points += sudokuView.grid.getDifficulty().getPoints() * 2;
+        if (sudokuView.getGrid().isColCompleted(sudokuView.getSelectedCell())){
+            points += sudokuView.getGrid().getDifficulty().getPoints() * 2;
         }
-        if (sudokuView.grid.isRowCompleted(sudokuView.selectedCell)){
-            points += sudokuView.grid.getDifficulty().getPoints() * 2;
+        if (sudokuView.getGrid().isRowCompleted(sudokuView.getSelectedCell())){
+            points += sudokuView.getGrid().getDifficulty().getPoints() * 2;
         }
-        if (sudokuView.grid.isSquareCompleted(sudokuView.selectedCell)){
-            points += sudokuView.grid.getDifficulty().getPoints() * 3;
+        if (sudokuView.getGrid().isSquareCompleted(sudokuView.getSelectedCell())){
+            points += sudokuView.getGrid().getDifficulty().getPoints() * 3;
         }
-        if(erros >= sudokuView.grid.getDifficulty().getErros()){
+        if(erros >= sudokuView.getGrid().getDifficulty().getErros()){
             Intent intent = new Intent(this,  Result.class);
             intent.putExtra("title","Ohh, que pena!");
-            intent.putExtra("message","Esgotou o limite de erros ("+sudokuView.grid.getDifficulty().getErros()+")!");
+            intent.putExtra("message","Esgotou o limite de erros ("+sudokuView.getGrid().getDifficulty().getErros()+")!");
             startActivity(intent);
             overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
             finish();
         }
-        if (sudokuView.grid.isCorrect()){
+        if (sudokuView.getGrid().isCorrect()){
             Intent intent = new Intent(this,  Result.class);
             intent.putExtra("title","Parabéns!");
             intent.putExtra("message","Conseguiu ganhar o jogo, somando "+points+" pontos em "+minutes+"m "+seconds+"s !");

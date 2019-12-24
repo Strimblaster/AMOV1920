@@ -4,18 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionManager;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
+import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
+import com.example.sudoku.M2_MultiPlayerLocal.Multiplayer;
+import com.example.sudoku.M3_MultiplayerLan.Connect;
 
 
 public class Jogar extends AppCompatActivity {

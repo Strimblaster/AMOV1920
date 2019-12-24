@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.Core;
 
 public class Solution {
     private String difficulty;

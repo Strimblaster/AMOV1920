@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.Core;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
+import com.example.sudoku.R;
 
 public class SudokuView extends View{
     private boolean notes;
@@ -21,6 +22,23 @@ public class SudokuView extends View{
         selectedCell = null;
         notes = false;
         grid = new Grid(difficulty);
+    }
+
+    public Grid getGrid() {
+        return grid;
+    }
+
+    public Cell getSelectedCell() {
+        return selectedCell;
+    }
+    public void clearSelectedCell(){
+        this.selectedCell.clear();
+    }
+    public void setValueSelectedCell(int value){
+        this.selectedCell.setValue(value);
+    }
+    public void addNoteSelectedCell(int note){
+        this.selectedCell.addNote(note);
     }
 
     void createPaints() {
@@ -190,13 +208,13 @@ public class SudokuView extends View{
         return super.onTouchEvent(event);
     }
 
-    void  enableNotes(){
+    public void  enableNotes(){
         this.notes = true;
     }
-    void  disableNotes(){
+    public void  disableNotes(){
         this.notes = false;
     }
-    boolean isNotes(){
+    public boolean isNotes(){
         return  this.notes;
     }
 

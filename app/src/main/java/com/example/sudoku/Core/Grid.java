@@ -1,19 +1,16 @@
-package com.example.sudoku;
+package com.example.sudoku.Core;
 
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-class Grid {
+public class Grid {
     private Cell[][] grid;
     private Difficulty difficulty;
     private static final String url = "https://sugoku.herokuapp.com/";
@@ -162,7 +159,7 @@ class Grid {
     }
 
 
-    boolean isCorrect(){
+    public boolean isCorrect(){
         int[][] sol = solution.getBoard();
         int dif = 0;
         for (int row = 0; row < getSize(); row++) {
@@ -175,7 +172,7 @@ class Grid {
         return dif == 0;
     }
 
-    boolean canNote(Cell cell, int note){
+    public boolean canNote(Cell cell, int note){
             int row = cell.getRow();
             int col = cell.getCol();
             int value =  note;
@@ -204,7 +201,7 @@ class Grid {
             return true;
         }
 
-    boolean isPossible(Cell cell){
+    public boolean isPossible(Cell cell){
         int row = cell.getRow();
         int col = cell.getCol();
         int value =  cell.getValue();
@@ -249,11 +246,11 @@ class Grid {
         return size;
     }
 
-    void setCell(Cell cell){
+    public void setCell(Cell cell){
         grid[cell.getRow()][cell.getCol()] = cell;
     }
 
-    void resetGrid(){
+    public void resetGrid(){
         for (int row = 0; row < getSize() ; row++) {
             for (int col = 0; col < getSize(); col++) {
                 grid[row][col].clear();
@@ -261,7 +258,7 @@ class Grid {
         }
     }
 
-    boolean isRowCompleted(Cell cell){
+    public boolean isRowCompleted(Cell cell){
         int[][] sol = solution.getBoard();
         int dif = 0;
         for (int col = 0; col < getSize() ; col++) {
@@ -274,7 +271,7 @@ class Grid {
         return dif == 0;
     }
 
-    boolean isColCompleted(Cell cell){
+    public boolean isColCompleted(Cell cell){
         int[][] sol = solution.getBoard();
         int dif = 0;
         for (int row = 0; row < getSize() ; row++) {
@@ -287,7 +284,7 @@ class Grid {
         return dif == 0;
     }
 
-    boolean isSquareCompleted(Cell cell){
+    public boolean isSquareCompleted(Cell cell){
         int[][] sol = solution.getBoard();
         int dif = 0;
         int start_col = cell.getCol()/3;
