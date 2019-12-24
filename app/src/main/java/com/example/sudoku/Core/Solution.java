@@ -1,6 +1,8 @@
 package com.example.sudoku.Core;
 
-public class Solution {
+import java.io.Serializable;
+
+public class Solution implements Serializable {
     private String difficulty;
     private int[][] solution;
     private String status;

@@ -1,8 +1,9 @@
 package com.example.sudoku.Core;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public enum Difficulty {
+public enum Difficulty  implements Serializable {
         easy(8, 2),
         medium(6, 3),
         hard(3,4),

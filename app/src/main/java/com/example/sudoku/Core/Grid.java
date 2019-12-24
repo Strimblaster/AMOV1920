@@ -6,22 +6,21 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Grid {
+public class Grid implements Serializable {
     private Cell[][] grid;
     private Difficulty difficulty;
     private static final String url = "https://sugoku.herokuapp.com/";
     private static final int size = 9;
-    private Status status;
     private Solution solution;
 
 
     Grid(Difficulty difficulty) {
         this.difficulty = difficulty;
-        this.status = Status.unsolved;
         buildGrid();
     }
 
@@ -63,44 +62,6 @@ public class Grid {
             e.printStackTrace();
         }
     }
-
-//    boolean validate(){
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Gson gson = new Gson();
-//                    URL api = new URL(url+"validate");
-//                    Board board = toBoard();
-//                    String json = gson.toJson(board);
-//                    HttpURLConnection conn = (HttpURLConnection) api.openConnection();
-//                    conn.setRequestMethod("POST");
-//                    conn.setRequestProperty("Content-Type", "application/json; utf-8");
-//                    conn.setRequestProperty("Accept", "application/json");
-//                    conn.setDoOutput(true);
-//                    conn.getOutputStream().write(json.getBytes("utf-8"), 0, json.getBytes("utf-8").length);
-//                    InputStream inputStream = conn.getInputStream();
-//                    byte[] b = new byte[1000];
-//                    int read = inputStream.read(b);
-//                    String json1 = new String(b, 0, read);
-//                    JsonParser parser = new JsonParser();
-//                    JsonObject o = parser.parse(json1).getAsJsonObject();
-//                    status = Status.valueOf(o.get("status").toString().replace("\"", ""));
-//                    conn.disconnect();
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        return status == Status.solved;
-//    }
 
     Board toBoard() {
         Board board = new Board();

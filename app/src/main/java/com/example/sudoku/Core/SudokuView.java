@@ -8,7 +8,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.example.sudoku.R;
 
-public class SudokuView extends View{
+import java.io.Serializable;
+
+public class SudokuView extends View implements Serializable {
     private boolean notes;
     Grid grid;
     Paint paintMainLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers;
@@ -218,4 +220,11 @@ public class SudokuView extends View{
         return  this.notes;
     }
 
+    public void setGrid(Grid grid) {
+        this.grid = grid;
+    }
+
+    public void setSelectedCell(Cell cell) {
+        this.selectedCell = cell;
+    }
 }

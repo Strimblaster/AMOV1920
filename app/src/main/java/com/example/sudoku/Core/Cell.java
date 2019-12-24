@@ -1,8 +1,9 @@
 package com.example.sudoku.Core;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-class Cell {
+public class Cell implements Serializable {
     private int value;
     private HashMap<Integer,Boolean> notes;
     private boolean isOriginal;

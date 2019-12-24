@@ -1,20 +1,26 @@
 package com.example.sudoku.M1_SinglePlayer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.Core.Grid;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.R;
-import com.example.sudoku.Core.Result;
+import com.example.sudoku.Result;
 import com.example.sudoku.Core.SudokuView;
+import com.google.gson.Gson;
 
 
 /**
@@ -26,13 +32,58 @@ public class SinglePlayer extends AppCompatActivity {
     Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
     Difficulty difficulty;
     ImageButton btnNotes, btnDelete,newGame;
-    TextView tvErros, tvPoints;
+    TextView tvErros, tvPoints, tvTime;
 
     private int seconds;
     private int minutes;
     private  int erros;
     private int points;
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Gson gson = new Gson();
+        outState.putInt("seconds", seconds);
+        outState.putInt("minutes", minutes);
+        outState.putInt("erros", erros);
+        outState.putInt("points", points);
+        outState.putString("grid", gson.toJson(sudokuView.getGrid()));
+        outState.putString("selectedCell", gson.toJson(sudokuView.getSelectedCell()));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Gson gson = new Gson();
+        erros = savedInstanceState.getInt("erros");
+        seconds = savedInstanceState.getInt("seconds");
+        minutes = savedInstanceState.getInt("minutes");
+        points = savedInstanceState.getInt("points");
+        sudokuView.setGrid( gson.fromJson(savedInstanceState.getString("grid"), Grid.class));
+        sudokuView.setSelectedCell(gson.fromJson(savedInstanceState.getString("selectedCell"), Cell.class));
+
+        if(minutes > 0){
+            tvTime.setText(minutes + "m " + seconds+"s");
+        }else{
+            tvTime.setText(seconds+"s");
+        }
+        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
+        tvPoints.setText(""+points);
+        sudokuView.invalidate();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_single_player); // it will use .xml from /res/layout
+
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -61,6 +112,7 @@ public class SinglePlayer extends AppCompatActivity {
         n7 =  findViewById(R.id.n7);
         n8 =  findViewById(R.id.n8);
         n9 =  findViewById(R.id.n9);
+        tvTime = findViewById(R.id.tvTime);
         tvErros = findViewById(R.id.tvErrors);
         tvPoints = findViewById(R.id.tvPoints);
         newGame = findViewById(R.id.newGame);
@@ -115,9 +167,7 @@ public class SinglePlayer extends AppCompatActivity {
 
 
         Thread thread = new Thread(){
-            TextView tvTime = findViewById(R.id.tvTime);
             private static final int second = 1000;
-
             public void run(){
                 while (true) {
                     try {

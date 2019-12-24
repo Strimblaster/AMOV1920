@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="@color/colorBackground"
     app:layout_gravity="center"
-    tools:context=".Core.Result">
+    tools:context=".Result">
 
     <TextView
         android:id="@+id/tvTitle"
