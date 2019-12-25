@@ -19,7 +19,7 @@ public class Grid implements Serializable {
     private Solution solution;
 
 
-    Grid(Difficulty difficulty) {
+    public Grid(Difficulty difficulty) {
         this.difficulty = difficulty;
         buildGrid();
     }
@@ -199,11 +199,11 @@ public class Grid implements Serializable {
         return grid[row][col].getValue();
     }
 
-    Cell getCell(int row, int col) {
+    public Cell getCell(int row, int col) {
         return grid[row][col];
     }
 
-    int getSize(){
+    public int getSize(){
         return size;
     }
 

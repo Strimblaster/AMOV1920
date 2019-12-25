@@ -17,7 +17,6 @@ import com.example.sudoku.Core.Grid;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
-import com.example.sudoku.Core.ViewSinglePlayer;
 import com.google.gson.Gson;
 
 

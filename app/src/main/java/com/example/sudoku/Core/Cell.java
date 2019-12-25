@@ -38,7 +38,7 @@ public class Cell implements Serializable {
         return hashMap;
     }
 
-    int getValue() {
+    public int getValue() {
         return value;
     }
 

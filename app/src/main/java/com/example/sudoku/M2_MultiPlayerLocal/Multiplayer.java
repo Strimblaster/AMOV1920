@@ -16,7 +16,6 @@ import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Grid;
 import com.example.sudoku.Core.Player;
-import com.example.sudoku.Core.ViewMultiplayerLocal;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;

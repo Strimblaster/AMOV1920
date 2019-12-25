@@ -1,4 +1,4 @@
-package com.example.sudoku.Core;
+package com.example.sudoku.M1_SinglePlayer;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,26 +6,28 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.sudoku.Core.Cell;
+import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.Core.Grid;
 import com.example.sudoku.R;
+
 import java.io.Serializable;
 
-public class ViewMultiplayerLocal extends View implements Serializable {
+public class ViewSinglePlayer extends View implements Serializable {
     private boolean notes;
     Grid grid;
     Paint paintMainLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers;
     Paint strokePaint, errorPaint, selectedPaint, notesPaint,backgroundPaint, relatedPaint;
     Cell selectedCell;
-    Player player1, player2, activePlayer;
 
-    public ViewMultiplayerLocal(Context context, Difficulty difficulty) {
+
+    public ViewSinglePlayer(Context context, Difficulty difficulty) {
         super(context);
         createPaints();
         selectedCell = null;
         notes = false;
         grid = new Grid(difficulty);
-        player1 = new Player("Jogador 1");
-        player2 = new Player("Jogador 2");
-        setActivePlayer(player1);
     }
 
     public Grid getGrid() {
@@ -129,7 +131,7 @@ public class ViewMultiplayerLocal extends View implements Serializable {
                                         temp.clear();
                                     }
                                     invalidate();
-                                } catch (InterruptedException e) {
+                                    } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -228,29 +230,5 @@ public class ViewMultiplayerLocal extends View implements Serializable {
 
     public void setSelectedCell(Cell cell) {
         this.selectedCell = cell;
-    }
-
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
-    }
-
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
-    }
-
-    public Player getActivePlayer() {
-        return activePlayer;
-    }
-
-    public void setActivePlayer(Player player) {
-        this.activePlayer = player;
     }
 }
