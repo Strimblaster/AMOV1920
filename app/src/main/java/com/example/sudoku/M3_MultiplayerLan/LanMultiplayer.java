@@ -11,7 +11,7 @@ import com.example.sudoku.R;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class Connect extends AppCompatActivity {
+public class LanMultiplayer extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

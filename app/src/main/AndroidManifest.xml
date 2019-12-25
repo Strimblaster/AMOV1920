@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
@@ -18,15 +19,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".M3_MultiplayerLan.LanMode"
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".DifficultyView"
+            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Result"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Resultado"
-            android:theme="@style/FullscreenTheme"
-            />
+            android:theme="@style/FullscreenTheme" />
         <activity
-            android:name=".M3_MultiplayerLan.Connect"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".M3_MultiplayerLan.LanMultiplayer"
             android:label="@string/title_activity_connect"
             android:theme="@style/FullscreenTheme" />
         <activity
@@ -39,12 +41,10 @@
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Jogar"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_jogar"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Profile"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_profile"
             android:theme="@style/FullscreenTheme" />
         <activity

@@ -1,66 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context="MainActivity">
 
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginBottom="32dp"
         android:fontFamily="@font/roboto"
         android:text="@string/title"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="@color/colorWhite"
-        android:textSize="60sp" />
+        android:textSize="60sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layoutSudokuBtns"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/layoutSudokuBtns"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/colorBackground"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:context=".MainActivity">
 
         <Button
             android:id="@+id/btnJogar"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginBottom="10sp"
             android:background="@color/colorBlue"
             android:fontFamily="@font/roboto"
-            android:padding="10dp"
+            android:padding="20sp"
             android:text="@string/btnJogar"
+            android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="25sp"></Button>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnProfile"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/colorBlue"
-            android:padding="10dp"
+            android:layout_marginBottom="10sp"
+            android:background="@color/colorCian"
+            android:fontFamily="@font/roboto"
+            android:padding="20sp"
             android:text="@string/btnProfile"
+            android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="25sp"></Button>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnHistorico"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/colorBlue"
-            android:padding="10dp"
+            android:background="@color/colorOrange"
+            android:fontFamily="@font/roboto"
+            android:padding="20sp"
             android:text="@string/btnHistórico"
+            android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="25sp"></Button>
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout >

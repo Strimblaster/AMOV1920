@@ -6,20 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
-import com.example.sudoku.Core.Difficulty;
-import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
-import com.example.sudoku.M2_MultiPlayerLocal.Multiplayer;
-import com.example.sudoku.M3_MultiplayerLan.Connect;
+import com.example.sudoku.M3_MultiplayerLan.LanMode;
 
 
 public class Jogar extends AppCompatActivity {
 
-    private Button btnSinglePlayer, btnMultiPlayer, btnConnect, btnSpEasy,btnSpHard,btnSpMedium, btnSpRandom;
-    private ProgressBar progressBar;
-    private LinearLayout spDifficulty;
+    private Button btnSinglePlayer, btnMultiPlayer, btnConnect, btnVoltar;
 
     @Override
     public void onBackPressed() {
@@ -32,105 +25,52 @@ public class Jogar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_jogar);
-        spDifficulty = findViewById(R.id.layoutDificuldade);
+
         btnSinglePlayer = findViewById(R.id.btnSinglePlayer);
         btnMultiPlayer = findViewById(R.id.btnMultiPlayer);
         btnConnect = findViewById(R.id.btnConnect);
-        progressBar = findViewById(R.id.pbLoader);
-        btnSpEasy = findViewById(R.id.btnEasy);
-        btnSpHard = findViewById(R.id.btnHard);
-        btnSpMedium = findViewById(R.id.btnMedium);
-        btnSpRandom = findViewById(R.id.btnRandom);
+        btnVoltar = findViewById(R.id.btnBack);
 
-        btnSpEasy.setOnClickListener(new View.OnClickListener() {
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToSinglePlayer(Difficulty.easy);
+                startActivity(new Intent(Jogar.this, MainActivity.class));
+                overridePendingTransition(R.anim.slide_left,R.anim.slide_out_right);
+                finish();
             }
         });
-        btnSpHard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToSinglePlayer(Difficulty.hard);
-            }
-        });
-        btnSpMedium.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToSinglePlayer(Difficulty.medium);
-            }
-        });
-        btnSpRandom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToSinglePlayer(Difficulty.random);
-            }
-        });
+
 
 
         btnSinglePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(spDifficulty.getVisibility() == View.VISIBLE){
-                    spDifficulty.setVisibility(View.GONE);
-                }else{
-                    spDifficulty.setVisibility(View.VISIBLE);
-                }
+                Intent intent = new Intent(Jogar.this,  DifficultyView.class);
+                intent.putExtra("mode","M1");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+                finish();
             }
         });
         btnMultiPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToMultiPlayer();
+                Intent intent = new Intent(Jogar.this,  DifficultyView.class);
+                intent.putExtra("mode","M2");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+                finish();
             }
         });
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToConnect();
+                Intent intent = new Intent(Jogar.this,  LanMode.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+                finish();
             }
         });
-    }
-
-    private void goToSinglePlayer(Difficulty difficulty) {
-                Thread thread = new Thread(){
-                    public void run(){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
-                };
-                thread.start();
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-        Intent intent = new Intent(this,  SinglePlayer.class);
-        intent.putExtra("Difficulty",difficulty);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
-        progressBar.setVisibility(View.GONE);
-        spDifficulty.setVisibility(View.GONE);
-        finish();
-    }
-
-    private void goToMultiPlayer() {
-        Intent intent = new Intent(this,  Multiplayer.class);
-        intent.putExtra("Difficulty",Difficulty.random);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
-        finish();
-    }
-
-    private void goToConnect() {
-        Intent intent = new Intent(this,  Connect.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
-        finish();
     }
 
 }
