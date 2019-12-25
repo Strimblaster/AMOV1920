@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/playersMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,8 +24,11 @@
             android:id="@+id/ivTrophy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:padding="10sp"
+            android:layout_weight="1"
+            android:paddingLeft="10sp"
+            android:paddingTop="8sp"
+            android:paddingRight="10sp"
+            android:paddingBottom="8sp"
             app:srcCompat="@drawable/ic_trophy" />
 
         <TextView
@@ -35,19 +39,20 @@
             android:background="@color/colorBackground"
             android:fontFamily="@font/roboto"
             android:gravity="left|center_vertical"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
             android:text="123"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/ivErros"
+            android:id="@+id/ivError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:padding="10sp"
+            android:layout_weight="1"
+            android:paddingLeft="10sp"
+            android:paddingTop="8sp"
+            android:paddingRight="10sp"
+            android:paddingBottom="8sp"
             app:srcCompat="@drawable/ic_error" />
 
         <TextView
@@ -55,18 +60,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:text="0/3"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:padding="10sp"
+            android:layout_weight="1"
+            android:paddingLeft="10sp"
+            android:paddingTop="8sp"
+            android:paddingRight="10sp"
+            android:paddingBottom="8sp"
             app:srcCompat="@drawable/ic_clock_circular_outline" />
 
         <TextView
@@ -79,6 +88,48 @@
             android:gravity="center"
             android:text="0s"
             android:textColor="@color/colorWhite"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playersMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TopMenu">
+
+        <TextView
+            android:id="@+id/tvPlayer1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorBlue"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:padding="5sp"
+            android:text="Jogador 1"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvPlayer2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorBackgroundLight"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:padding="5sp"
+            android:text="Jogador 2"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -90,7 +141,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TopMenu">
+        app:layout_constraintTop_toBottomOf="@id/playersMenu">
 
         <LinearLayout
             android:id="@+id/optionsLayout"
@@ -101,15 +152,6 @@
             app:layout_constraintEnd_toStartOf="@+id/flSudoku"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/newGame"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorBlue"
-                android:padding="10sp"
-                app:srcCompat="@drawable/ic_replay" />
 
             <ImageButton
                 android:id="@+id/btnNotes"
@@ -145,7 +187,7 @@
         <LinearLayout
             android:id="@+id/Numbers"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="vertical"

@@ -120,6 +120,7 @@ public class Jogar extends AppCompatActivity {
 
     private void goToMultiPlayer() {
         Intent intent = new Intent(this,  Multiplayer.class);
+        intent.putExtra("Difficulty",Difficulty.random);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
         finish();

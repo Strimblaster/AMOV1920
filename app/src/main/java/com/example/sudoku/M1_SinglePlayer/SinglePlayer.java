@@ -4,14 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Difficulty;
@@ -19,7 +17,7 @@ import com.example.sudoku.Core.Grid;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
-import com.example.sudoku.Core.SudokuView;
+import com.example.sudoku.Core.ViewSinglePlayer;
 import com.google.gson.Gson;
 
 
@@ -28,7 +26,7 @@ import com.google.gson.Gson;
  * status bar and navigation/system bar) with user interaction.
  */
 public class SinglePlayer extends AppCompatActivity {
-    SudokuView sudokuView;
+    ViewSinglePlayer viewSinglePlayer;
     Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
     Difficulty difficulty;
     ImageButton btnNotes, btnDelete,newGame;
@@ -47,8 +45,8 @@ public class SinglePlayer extends AppCompatActivity {
         outState.putInt("minutes", minutes);
         outState.putInt("erros", erros);
         outState.putInt("points", points);
-        outState.putString("grid", gson.toJson(sudokuView.getGrid()));
-        outState.putString("selectedCell", gson.toJson(sudokuView.getSelectedCell()));
+        outState.putString("grid", gson.toJson(viewSinglePlayer.getGrid()));
+        outState.putString("selectedCell", gson.toJson(viewSinglePlayer.getSelectedCell()));
     }
 
     @Override
@@ -59,30 +57,17 @@ public class SinglePlayer extends AppCompatActivity {
         seconds = savedInstanceState.getInt("seconds");
         minutes = savedInstanceState.getInt("minutes");
         points = savedInstanceState.getInt("points");
-        sudokuView.setGrid( gson.fromJson(savedInstanceState.getString("grid"), Grid.class));
-        sudokuView.setSelectedCell(gson.fromJson(savedInstanceState.getString("selectedCell"), Cell.class));
+        viewSinglePlayer.setGrid( gson.fromJson(savedInstanceState.getString("grid"), Grid.class));
+        viewSinglePlayer.setSelectedCell(gson.fromJson(savedInstanceState.getString("selectedCell"), Cell.class));
 
         if(minutes > 0){
             tvTime.setText(minutes + "m " + seconds+"s");
         }else{
             tvTime.setText(seconds+"s");
         }
-        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
+        tvErros.setText(erros+"/"+ viewSinglePlayer.getGrid().getDifficulty().getErros());
         tvPoints.setText(""+points);
-        sudokuView.invalidate();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_single_player); // it will use .xml from /res/layout
-
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-        }
+        viewSinglePlayer.invalidate();
     }
 
     @Override
@@ -97,8 +82,8 @@ public class SinglePlayer extends AppCompatActivity {
         setContentView(R.layout.activity_single_player);
         FrameLayout flSudoku = findViewById(R.id.flSudoku);
         difficulty = (Difficulty) getIntent().getSerializableExtra("Difficulty");
-        sudokuView = new SudokuView(this, difficulty);
-        flSudoku.addView(sudokuView);
+        viewSinglePlayer = new ViewSinglePlayer(this, difficulty);
+        flSudoku.addView(viewSinglePlayer);
 
         this.erros = 0;
         this.points = 0;
@@ -117,25 +102,25 @@ public class SinglePlayer extends AppCompatActivity {
         tvPoints = findViewById(R.id.tvPoints);
         newGame = findViewById(R.id.newGame);
 
-        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
+        tvErros.setText(erros+"/"+ viewSinglePlayer.getGrid().getDifficulty().getErros());
         tvPoints.setText(""+points);
 
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sudokuView.getGrid().resetGrid();
+                viewSinglePlayer.getGrid().resetGrid();
                 resetValues();
-                sudokuView.invalidate();
+                viewSinglePlayer.invalidate();
             }
         });
         btnDelete = findViewById(R.id.btnDelete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sudokuView.getSelectedCell() != null) {
-                    sudokuView.clearSelectedCell();
-                    sudokuView.getGrid().setCell(sudokuView.getSelectedCell());
-                    sudokuView.invalidate();
+                if (viewSinglePlayer.getSelectedCell() != null) {
+                    viewSinglePlayer.clearSelectedCell();
+                    viewSinglePlayer.getGrid().setCell(viewSinglePlayer.getSelectedCell());
+                    viewSinglePlayer.invalidate();
                 }
             }
         });
@@ -143,13 +128,13 @@ public class SinglePlayer extends AppCompatActivity {
         btnNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sudokuView.getSelectedCell() != null ) {
-                    if (!sudokuView.isNotes()) {
-                        sudokuView.enableNotes();
-                        sudokuView.invalidate();
+                if(viewSinglePlayer.getSelectedCell() != null ) {
+                    if (!viewSinglePlayer.isNotes()) {
+                        viewSinglePlayer.enableNotes();
+                        viewSinglePlayer.invalidate();
                     } else {
-                        sudokuView.disableNotes();
-                        sudokuView.invalidate();
+                        viewSinglePlayer.disableNotes();
+                        viewSinglePlayer.invalidate();
                     }
                 }
             }
@@ -205,7 +190,7 @@ public class SinglePlayer extends AppCompatActivity {
         this.minutes = 0;
         this.seconds = 0;
         this.points = 0;
-        tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
+        tvErros.setText(erros+"/"+ viewSinglePlayer.getGrid().getDifficulty().getErros());
         tvPoints.setText(""+points);
     }
 
@@ -214,47 +199,47 @@ public class SinglePlayer extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sudokuView.getSelectedCell() != null) {
-                    if(!sudokuView.isNotes()) {
-                        sudokuView.setValueSelectedCell(value);
-                        if (!sudokuView.getGrid().isPossible(sudokuView.getSelectedCell())){
+                if (viewSinglePlayer.getSelectedCell() != null) {
+                    if(!viewSinglePlayer.isNotes()) {
+                        viewSinglePlayer.setValueSelectedCell(value);
+                        if (!viewSinglePlayer.getGrid().isPossible(viewSinglePlayer.getSelectedCell())){
                             erros++;
-                            points -= sudokuView.getGrid().getDifficulty().getPoints() * 4;
-                            tvErros.setText(erros+"/"+sudokuView.getGrid().getDifficulty().getErros());
+                            points -= viewSinglePlayer.getGrid().getDifficulty().getPoints() * 4;
+                            tvErros.setText(erros+"/"+ viewSinglePlayer.getGrid().getDifficulty().getErros());
                         }else{
-                            points += sudokuView.getGrid().getDifficulty().getPoints();
+                            points += viewSinglePlayer.getGrid().getDifficulty().getPoints();
                         }
-                    }else if (sudokuView.getGrid().canNote(sudokuView.getSelectedCell(),value)){
-                        sudokuView.addNoteSelectedCell(value);
+                    }else if (viewSinglePlayer.getGrid().canNote(viewSinglePlayer.getSelectedCell(),value)){
+                        viewSinglePlayer.addNoteSelectedCell(value);
                     }
-                    sudokuView.getGrid().setCell(sudokuView.getSelectedCell());
+                    viewSinglePlayer.getGrid().setCell(viewSinglePlayer.getSelectedCell());
                     validate();
                     tvPoints.setText(""+points);
-                    sudokuView.invalidate();
+                    viewSinglePlayer.invalidate();
                 }
             }
         });
     }
 
     private void validate() {
-        if (sudokuView.getGrid().isColCompleted(sudokuView.getSelectedCell())){
-            points += sudokuView.getGrid().getDifficulty().getPoints() * 2;
+        if (viewSinglePlayer.getGrid().isColCompleted(viewSinglePlayer.getSelectedCell())){
+            points += viewSinglePlayer.getGrid().getDifficulty().getPoints() * 2;
         }
-        if (sudokuView.getGrid().isRowCompleted(sudokuView.getSelectedCell())){
-            points += sudokuView.getGrid().getDifficulty().getPoints() * 2;
+        if (viewSinglePlayer.getGrid().isRowCompleted(viewSinglePlayer.getSelectedCell())){
+            points += viewSinglePlayer.getGrid().getDifficulty().getPoints() * 2;
         }
-        if (sudokuView.getGrid().isSquareCompleted(sudokuView.getSelectedCell())){
-            points += sudokuView.getGrid().getDifficulty().getPoints() * 3;
+        if (viewSinglePlayer.getGrid().isSquareCompleted(viewSinglePlayer.getSelectedCell())){
+            points += viewSinglePlayer.getGrid().getDifficulty().getPoints() * 3;
         }
-        if(erros >= sudokuView.getGrid().getDifficulty().getErros()){
+        if(erros >= viewSinglePlayer.getGrid().getDifficulty().getErros()){
             Intent intent = new Intent(this,  Result.class);
             intent.putExtra("title","Ohh, que pena!");
-            intent.putExtra("message","Esgotou o limite de erros ("+sudokuView.getGrid().getDifficulty().getErros()+")!");
+            intent.putExtra("message","Esgotou o limite de erros ("+ viewSinglePlayer.getGrid().getDifficulty().getErros()+")!");
             startActivity(intent);
             overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
             finish();
         }
-        if (sudokuView.getGrid().isCorrect()){
+        if (viewSinglePlayer.getGrid().isCorrect()){
             Intent intent = new Intent(this,  Result.class);
             intent.putExtra("title","Parabéns!");
             intent.putExtra("message","Conseguiu ganhar o jogo, somando "+points+" pontos em "+minutes+"m "+seconds+"s !");

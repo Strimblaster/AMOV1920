@@ -10,7 +10,7 @@ import com.example.sudoku.R;
 
 import java.io.Serializable;
 
-public class SudokuView extends View implements Serializable {
+public class ViewSinglePlayer extends View implements Serializable {
     private boolean notes;
     Grid grid;
     Paint paintMainLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers;
@@ -18,7 +18,7 @@ public class SudokuView extends View implements Serializable {
     Cell selectedCell;
 
 
-    public SudokuView(Context context, Difficulty difficulty) {
+    public ViewSinglePlayer(Context context, Difficulty difficulty) {
         super(context);
         createPaints();
         selectedCell = null;
