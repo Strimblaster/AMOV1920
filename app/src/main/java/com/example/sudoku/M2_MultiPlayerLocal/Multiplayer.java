@@ -115,14 +115,13 @@ public class Multiplayer extends AppCompatActivity {
         int maxErros = (int) (viewMultiplayerLocal.getGrid().getDifficulty().getErros()*1.5);
         tvErrors.setText(errors+"/"+maxErros);
         tvPoints.setText(""+viewMultiplayerLocal.getActivePlayer().getPoints());
-        if(viewMultiplayerLocal.getActivePlayer() != null) {
-            if (viewMultiplayerLocal.getActivePlayer().compareTo(viewMultiplayerLocal.getPlayer1()) > 0) {
-                tvPlayer1.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-                tvPlayer2.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
-            } else {
-                tvPlayer2.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-                tvPlayer1.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
-            }
+
+        if (viewMultiplayerLocal.getActivePlayer().compareTo(viewMultiplayerLocal.getPlayer1()) > 0) {
+            tvPlayer1.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+            tvPlayer2.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+        } else  if (viewMultiplayerLocal.getActivePlayer().compareTo(viewMultiplayerLocal.getPlayer2()) > 0){
+            tvPlayer2.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+            tvPlayer1.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
         }else{
             tvPlayer1.setBackgroundColor(getResources().getColor(R.color.colorBlue));
             tvPlayer2.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
