@@ -7,16 +7,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.M2_MultiPlayerLocal.Multiplayer;
 import com.example.sudoku.M3_MultiplayerLan.LanMultiplayer;
 
+import java.net.InetAddress;
+
 public class DifficultyView extends AppCompatActivity {
     Button btnEasy, btnMedium, btnHard, btnRandom, btnBack;
-    String mode;
+    String mode, player;
     ProgressBar progressBar;
+    String ip;
 
     @Override
     public void onBackPressed() {
@@ -38,13 +42,15 @@ public class DifficultyView extends AppCompatActivity {
         progressBar = findViewById(R.id.pbLoader);
 
         mode =  getIntent().getStringExtra("mode");
+        player =  getIntent().getStringExtra("player");
+        ip = getIntent().getStringExtra("ip");
 
 
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mode.equals("M3")){
-                    goToLanMultiplayer(Difficulty.easy);
+                    goToLanMultiplayer(Difficulty.easy, player);
                 }else if (mode.equals("M2")){
                     goToMultiPlayer(Difficulty.easy);
                 }else {
@@ -57,7 +63,7 @@ public class DifficultyView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mode.equals("M3")){
-                    goToLanMultiplayer(Difficulty.medium);
+                    goToLanMultiplayer(Difficulty.medium, player);
                 }else if (mode.equals("M2")){
                     goToMultiPlayer(Difficulty.medium);
                 }else {
@@ -69,7 +75,7 @@ public class DifficultyView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mode.equals("M3")){
-                    goToLanMultiplayer(Difficulty.hard);
+                    goToLanMultiplayer(Difficulty.hard, player);
                 }else if (mode.equals("M2")){
                     goToMultiPlayer(Difficulty.hard);
                 }else {
@@ -81,7 +87,7 @@ public class DifficultyView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mode.equals("M3")){
-                    goToLanMultiplayer(Difficulty.random);
+                    goToLanMultiplayer(Difficulty.random, player);
                 }else if (mode.equals("M2")){
                     goToMultiPlayer(Difficulty.random);
                 }else {
@@ -142,9 +148,11 @@ public class DifficultyView extends AppCompatActivity {
         finish();
     }
 
-    private void goToLanMultiplayer(Difficulty difficulty) {
+    private void goToLanMultiplayer(Difficulty difficulty, String player) {
+        Toast.makeText(getApplicationContext(), "IP: "+ ip, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this,  LanMultiplayer.class);
         intent.putExtra("Difficulty",difficulty);
+        intent.putExtra("player",player);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
         progressBar.setVisibility(View.GONE);

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     android:background="@color/colorBackground"
-    tools:context=".M1_SinglePlayer.SinglePlayer">
+    tools:context=".M2_MultiPlayerLocal.Multiplayer">
 
     <LinearLayout
         android:id="@+id/TopMenu"

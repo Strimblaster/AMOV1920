@@ -65,7 +65,8 @@ public class Jogar extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Jogar.this,  LanMode.class);
+                Intent intent = new Intent(Jogar.this, LanMode.class);
+                intent.putExtra("mode","M3");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
                 finish();

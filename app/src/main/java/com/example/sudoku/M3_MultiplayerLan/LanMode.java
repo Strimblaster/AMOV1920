@@ -15,16 +15,22 @@ import android.widget.EditText;
 import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
+import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.DifficultyView;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 public class LanMode extends AppCompatActivity {
 
@@ -71,12 +77,14 @@ public class LanMode extends AppCompatActivity {
         btnServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),  localhost.getHostAddress(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(new Intent(LanMode.this, LanMultiplayer.class));
-                intent.putExtra("mode", "server");
-                intent.putExtra("ip", "nao preciso");
+                //Toast.makeText(getApplicationContext(), "IP: "+ localhost.getHostAddress(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(new Intent(LanMode.this, DifficultyView.class));
+                intent.putExtra("mode", "M3");
+                intent.putExtra("player", "server");
+                intent.putExtra("ip", getLocalIpAddress());
+
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
                 finish();
             }
         });
@@ -102,7 +110,8 @@ public class LanMode extends AppCompatActivity {
                                     try {
                                         if (validarIP(ip)) {
                                             Intent intent = new Intent(new Intent(LanMode.this, LanMultiplayer.class));
-                                            intent.putExtra("mode", "client");
+                                            intent.putExtra("mode", "M3");
+                                            intent.putExtra("player", "client");
                                             intent.putExtra("ip", ip);
                                             dialog.dismiss();
                                             startActivity(intent);
@@ -152,5 +161,22 @@ public class LanMode extends AppCompatActivity {
     private boolean validarIP(String ip) throws IOException {
         InetAddress inetAddress = InetAddress.getByName(ip);
         return inetAddress.isReachable(5000);
+    }
+
+    public static String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

@@ -75,6 +75,7 @@ public class SinglePlayer extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_left,R.anim.slide_out_right);
         finish();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
