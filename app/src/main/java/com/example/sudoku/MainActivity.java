@@ -1,15 +1,18 @@
 package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.sudoku.Core.AppDatabase;
+
 
 public class MainActivity extends AppCompatActivity {
-
+    public static AppDatabase appDatabase;
     private Button btnJogar, btnProfile, btnHistorico;
 
     @Override
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        appDatabase = Room.databaseBuilder(getApplicationContext(),AppDatabase.class, "database").build();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 

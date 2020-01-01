@@ -5,11 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera.flash" />
-    <uses-feature android:name="android.hardware.camera.front" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera2.full"/>
 
     <application
         android:allowBackup="true"
@@ -19,9 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".M3_MultiplayerLan.LanMode"
+        <activity
+            android:name=".camera"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".M3_MultiplayerLan.LanMode"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".DifficultyView"
+        <activity
+            android:name=".DifficultyView"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Result"
@@ -46,7 +49,8 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
-            android:theme="@style/FullscreenTheme" />
+            android:theme="@style/FullscreenTheme"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/FullscreenTheme">

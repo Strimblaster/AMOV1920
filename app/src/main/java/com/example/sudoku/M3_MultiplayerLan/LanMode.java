@@ -16,6 +16,7 @@ import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
 import com.example.sudoku.Core.Difficulty;
+import com.example.sudoku.Core.Player;
 import com.example.sudoku.DifficultyView;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.MainActivity;
@@ -35,7 +36,7 @@ import java.util.Enumeration;
 public class LanMode extends AppCompatActivity {
 
     Button btnBack, btnServer, btnClient;
-    InetAddress localhost;
+    Player player;
 
     @Override
     public void onBackPressed() {
@@ -47,23 +48,10 @@ public class LanMode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lan_mode);
-
+//        player = (Player) getIntent().getSerializableExtra("player");
         btnBack = findViewById(R.id.btnBack);
         btnServer = findViewById(R.id.btnServer);
         btnClient = findViewById(R.id.btnClient);
-        Thread thread = new Thread(){
-            public void run() {
-                Socket socket = new Socket();
-                try {
-                    socket.connect(new InetSocketAddress("google.com", 80));
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                }
-                localhost = socket.getLocalAddress();
-            }
-        };
-        thread.start();
-
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,10 +65,12 @@ public class LanMode extends AppCompatActivity {
         btnServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "IP: "+ localhost.getHostAddress(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "IP: "+ getLocalIpAddress(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(new Intent(LanMode.this, DifficultyView.class));
+                player = new Player("Server");
                 intent.putExtra("mode", "M3");
-                intent.putExtra("player", "server");
+                intent.putExtra("type", "server");
+                intent.putExtra("player", player);
                 intent.putExtra("ip", getLocalIpAddress());
 
                 startActivity(intent);
@@ -110,8 +100,10 @@ public class LanMode extends AppCompatActivity {
                                     try {
                                         if (validarIP(ip)) {
                                             Intent intent = new Intent(new Intent(LanMode.this, LanMultiplayer.class));
+                                            player = new Player("Cliente");
                                             intent.putExtra("mode", "M3");
-                                            intent.putExtra("player", "client");
+                                            intent.putExtra("player", player);
+                                            intent.putExtra("type", "client");
                                             intent.putExtra("ip", ip);
                                             dialog.dismiss();
                                             startActivity(intent);

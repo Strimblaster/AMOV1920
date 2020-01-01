@@ -22,12 +22,12 @@ public class ViewMultiplayerLan extends View implements Serializable {
     Cell selectedCell;
     Player player1, player2, activePlayer;
 
-    public ViewMultiplayerLan(Context context, Difficulty difficulty) {
+    public ViewMultiplayerLan(Context context, Grid grid) {
         super(context);
         createPaints();
         selectedCell = null;
         notes = false;
-        grid = new Grid(difficulty);
+        this.grid = grid;
         player1 = new Player("Jogador 1");
         player2 = new Player("Jogador 2");
         setActivePlayer(player1);
@@ -35,6 +35,9 @@ public class ViewMultiplayerLan extends View implements Serializable {
 
     public Grid getGrid() {
         return grid;
+    }
+    public void setGrid(Grid grid){
+        this.grid = grid;
     }
 
     public Cell getSelectedCell() {
@@ -225,10 +228,6 @@ public class ViewMultiplayerLan extends View implements Serializable {
     }
     public boolean isNotes(){
         return  this.notes;
-    }
-
-    public void setGrid(Grid grid) {
-        this.grid = grid;
     }
 
     public void setSelectedCell(Cell cell) {
