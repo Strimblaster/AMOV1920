@@ -13,7 +13,7 @@ public interface PlayerDAO {
         List<Player> getPlayer();
 
         @Insert
-        void insertPlayer(Player... player);
+        void insertPlayer(Player player);
 
         @Query("DELETE  FROM player;")
         void deleteAll();

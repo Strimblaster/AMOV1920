@@ -10,13 +10,18 @@ import java.util.Stack;
 
 @Entity(tableName = "player")
 public class Player implements Serializable {
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         private int id;
         @ColumnInfo(name = "name")
         private String name;
         @ColumnInfo(name = "photo")
         private String photoPath;
 
+        public void setId(int id) {
+                this.id = id;
+        }
+        @Ignore
+        private int rightPlays;
         @Ignore
         private int points;
         @Ignore
@@ -30,6 +35,7 @@ public class Player implements Serializable {
                 this.timeStack = new Stack<>();
                 this.playing = false;
                 this.photoPath = photoPath;
+                this.rightPlays = 0;
         }
 
         @Ignore
@@ -39,6 +45,7 @@ public class Player implements Serializable {
                 this.timeStack = new Stack<>();
                 this.playing = false;
                 this.photoPath = "";
+                this.rightPlays = 0;
         }
 
         @Ignore
@@ -48,8 +55,12 @@ public class Player implements Serializable {
                 this.points = 0;
                 this.timeStack = new Stack<>();
                 this.playing = false;
+                this.rightPlays = 0;
         }
 
+        public void addRightPlays() {
+                this.rightPlays++;
+        }
 
         public String getPhotoPath() {
                 return photoPath;
@@ -57,10 +68,6 @@ public class Player implements Serializable {
 
         public int getId() {
                 return id;
-        }
-
-        public void setId(int id) {
-                this.id = id;
         }
 
         public String getName() {
@@ -105,5 +112,9 @@ public class Player implements Serializable {
 
         public void setNotPlaying() {
                 this.playing = false;
+        }
+
+        public int getRightPlays() {
+                return rightPlays;
         }
 }

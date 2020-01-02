@@ -16,7 +16,10 @@ import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Grid;
 import com.example.sudoku.Core.Player;
+import com.example.sudoku.Core.PlayerScoreJoin;
+import com.example.sudoku.Core.Score;
 import com.example.sudoku.Jogar;
+import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
 import com.google.gson.Gson;
@@ -240,9 +243,11 @@ public class Multiplayer extends AppCompatActivity {
                                                                 if (viewMultiplayerLocal.getActivePlayer().getName().equals(viewMultiplayerLocal.getPlayer1().getName())) {
                                                                         viewMultiplayerLocal.getPlayer1().addPoints(viewMultiplayerLocal.getGrid().getDifficulty().getPoints());
                                                                         viewMultiplayerLocal.getPlayer1().addExtraTime();
+                                                                        viewMultiplayerLocal.getPlayer1().addRightPlays();
                                                                 } else {
                                                                         viewMultiplayerLocal.getPlayer2().addPoints(viewMultiplayerLocal.getGrid().getDifficulty().getPoints());
                                                                         viewMultiplayerLocal.getPlayer2().addExtraTime();
+                                                                        viewMultiplayerLocal.getPlayer2().addRightPlays();
                                                                 }
                                                                 if (viewMultiplayerLocal.getGrid().isColCompleted(viewMultiplayerLocal.getSelectedCell())) {
                                                                         if (viewMultiplayerLocal.getActivePlayer().getName().equals(viewMultiplayerLocal.getPlayer1().getName())) {
@@ -300,11 +305,23 @@ public class Multiplayer extends AppCompatActivity {
                 if (viewMultiplayerLocal.getGrid().isCorrect()) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Parabéns!");
+                        Score score = new Score();
                         if (viewMultiplayerLocal.getPlayer1().getPoints() > viewMultiplayerLocal.getPlayer2().getPoints()) {
                                 intent.putExtra("message", "Conseguiram completar o puzzle!  O" + viewMultiplayerLocal.getPlayer1().getName() + "foi o vencedor com " + viewMultiplayerLocal.getPlayer1().getPoints() + ", com mais " + (viewMultiplayerLocal.getPlayer1().getPoints() - viewMultiplayerLocal.getPlayer2().getPoints()) + " que o " + viewMultiplayerLocal.getPlayer2().getPoints());
+                                score.setWinner(viewMultiplayerLocal.getPlayer1().getName());
+                                score.setRightPlaysM2M3(viewMultiplayerLocal.getPlayer1().getRightPlays());
                         } else {
                                 intent.putExtra("message", "Conseguiram completar o puzzle!  O" + viewMultiplayerLocal.getPlayer2().getName() + "foi o vencedor com " + viewMultiplayerLocal.getPlayer2().getPoints() + ", com mais " + (viewMultiplayerLocal.getPlayer2().getPoints() - viewMultiplayerLocal.getPlayer1().getPoints()) + " que o " + viewMultiplayerLocal.getPlayer1().getPoints());
+                                score.setWinner(viewMultiplayerLocal.getPlayer2().getName());
+                                score.setRightPlaysM2M3(viewMultiplayerLocal.getPlayer2().getRightPlays());
                         }
+                        score.setMode("M2");
+                        score.setTimeM1(0);
+                        score.setWinner(MainActivity.player.getName());
+                        long id = MainActivity.appDatabase.score().insertScore(score);
+                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
+                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
+                        playerScoreJoin.setScoreID(id);
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                         finish();

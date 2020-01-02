@@ -10,6 +10,8 @@ import android.widget.Button;
 
 import com.example.sudoku.Core.AppDatabase;
 import com.example.sudoku.Core.Player;
+import com.example.sudoku.Core.PlayerScoreJoin;
+import com.example.sudoku.Core.Score;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
         public static AppDatabase appDatabase;
         private Button btnJogar, btnProfile, btnHistorico;
-        private Player player;
+        public static Player player;
 
         @Override
         public void onBackPressed() {
@@ -42,6 +44,25 @@ public class MainActivity extends AppCompatActivity {
                                         Intent intent = new Intent(MainActivity.this, Profile.class);
                                         startActivity(intent);
                                         finish();
+                                }else {
+                                        player = players.get(0);
+                                        Score score = new Score();
+                                        score.setMode("M1");
+                                        score.setTimeM1(130);
+                                        score.setWinner(player.getName());
+                                        score.setRightPlaysM2M3(0);
+                                        appDatabase.conn().deleteAll();
+                                        appDatabase.score().deleteAll();
+                                        long id = appDatabase.score().insertScore(score);
+                                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
+                                        playerScoreJoin.setPlayerID(player.getId());
+                                        playerScoreJoin.setScoreID(id);
+                                        appDatabase.conn().insert(playerScoreJoin);
+                                        List<Score> scores = appDatabase.conn().getScoresForPlayer(player.getId());
+
+                                        for (Score s : scores){
+                                                System.out.println(s.getMode()+" "+s.getWinner()+" "+s.getTimeM1());
+                                        }
                                 }
                         }
                 };
