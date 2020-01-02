@@ -124,22 +124,22 @@ public class ViewMultiplayerLocal extends View implements Serializable {
                 if (selectedCell != null) {
                     if(c.getValue() != 0 && !c.isOriginal() && !grid.isPossible(c)){
                         canvas.drawRect(rectangle, errorPaint);
-                        final Cell temp = selectedCell;
-                        Thread thread = new Thread(){
-                            private static final int time = 3000;
-                            public void run(){
-                                try {
-                                    Thread.sleep(time);
-                                    if(!grid.isPossible(selectedCell)) {
-                                        temp.clear();
-                                    }
-                                    invalidate();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                        thread.start();
+//                        final Cell temp = selectedCell;
+//                        Thread thread = new Thread(){
+//                            private static final int time = 3000;
+//                            public void run(){
+//                                try {
+//                                    Thread.sleep(time);
+//                                    if(!grid.isPossible(selectedCell)) {
+//                                        temp.clear();
+//                                    }
+//                                    invalidate();
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        };
+//                        thread.start();
                     }else if (c == selectedCell && isNotes()) {
                         canvas.drawRect(rectangle, notesPaint);
                     } else if (c == selectedCell){
