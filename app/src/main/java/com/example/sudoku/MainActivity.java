@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                                         finish();
                                 }else {
                                         player = players.get(0);
+//                                        Remover esta parte!!!!!! SO PARA TESTES!!!!!
                                         Score score = new Score();
                                         score.setMode("M1");
                                         score.setTimeM1(130);
@@ -58,11 +59,7 @@ public class MainActivity extends AppCompatActivity {
                                         playerScoreJoin.setPlayerID(player.getId());
                                         playerScoreJoin.setScoreID(id);
                                         appDatabase.conn().insert(playerScoreJoin);
-                                        List<Score> scores = appDatabase.conn().getScoresForPlayer(player.getId());
-
-                                        for (Score s : scores){
-                                                System.out.println(s.getMode()+" "+s.getWinner()+" "+s.getTimeM1());
-                                        }
+                                        //                                       ATE AQUI SO PARA TESTES!!!!!
                                 }
                         }
                 };
@@ -83,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, Profile.class);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                                 finish();
                         }
                 });
@@ -91,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, Historico.class);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                                 finish();
                         }
                 });
