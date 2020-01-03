@@ -19,6 +19,8 @@ import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
 import com.example.sudoku.Jogar;
+import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
+import com.example.sudoku.M3_MultiplayerLan.LanClient;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
@@ -31,7 +33,7 @@ import com.google.gson.Gson;
  */
 public class Multiplayer extends AppCompatActivity {
         ViewMultiplayerLocal viewMultiplayerLocal;
-        Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
+        Button n1, n2, n3, n4, n5, n6, n7, n8, n9, btnM1;
         Difficulty difficulty;
         ImageButton btnNotes, btnDelete;
         TextView tvPoints, tvTime, tvPlayer1, tvPlayer2, tvErrors;
@@ -113,6 +115,7 @@ public class Multiplayer extends AppCompatActivity {
                 n7 = findViewById(R.id.n7);
                 n8 = findViewById(R.id.n8);
                 n9 = findViewById(R.id.n9);
+                btnM1 = findViewById(R.id.btnM1);
                 tvTime = findViewById(R.id.tvTime);
                 tvPoints = findViewById(R.id.tvPoints);
                 tvPlayer1 = findViewById(R.id.tvPlayer);
@@ -134,6 +137,17 @@ public class Multiplayer extends AppCompatActivity {
                         viewMultiplayerLocal.setActivePlayer(viewMultiplayerLocal.getPlayer1());
                 }
 
+                btnM1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                Intent intent = new Intent(new Intent(Multiplayer.this, SinglePlayer.class));
+                                intent.putExtra("Difficulty", viewMultiplayerLocal.getGrid().getDifficulty());
+                                intent.putExtra("grid", viewMultiplayerLocal.getGrid());
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+                                finish();
+                        }
+                });
                 btnDelete = findViewById(R.id.btnDelete);
                 btnDelete.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -176,6 +176,19 @@
             android:padding="10sp"
             app:srcCompat="@drawable/ic_rubber" />
 
+        <Button
+            android:id="@+id/btnM1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorCian"
+            android:fontFamily="@font/roboto"
+            android:text="M1"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout
