@@ -130,4 +130,8 @@ public class Cell implements Serializable {
         public void clearEarnedPoints() {
                 this.earnedPoints = false;
         }
+
+        public void removeBadValue() {
+                this.badValue = false;
+        }
 }

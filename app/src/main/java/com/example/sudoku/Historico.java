@@ -56,6 +56,10 @@ public class Historico extends AppCompatActivity {
                         e.printStackTrace();
                 }
 
+                for (Score s : scoreList){
+                        System.out.println(s.getMode()+" "+s.getWinner());
+                }
+
                 btnBack = findViewById(R.id.btnVoltar);
                 recyclerView = findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
@@ -63,7 +67,6 @@ public class Historico extends AppCompatActivity {
                 recyclerView.setLayoutManager(layoutManager);
                 adapter = new Adapter(scoreList);
                 recyclerView.setAdapter(adapter);
-
                 if (scoreList.size() == 0){
                         Toast.makeText(this," Ainda não existem dados, jogue primeiro!", Toast.LENGTH_LONG).show();
                 }
@@ -105,12 +108,12 @@ public class Historico extends AppCompatActivity {
                 @Override
                 public void onBindViewHolder(ViewHolder holder, int position) {
                         TextView tvPlayer, tvMode, tvInfo;
-                        int info;
+                        String info;
 
                         if (scoreList.get(position).getTimeM1() > 0) {
-                                info = scoreList.get(position).getTimeM1();
+                                info = (((int)scoreList.get(position).getTimeM1() /60)+ "m "+((int)scoreList.get(position).getTimeM1() %60)+"s");
                         } else {
-                                info = scoreList.get(position).getRightPlaysM2M3();
+                                info = scoreList.get(position).getRightPlaysM2M3()+" jogadas";
                         }
                         tvPlayer = holder.view.findViewById(R.id.tvPlayerName);
                         tvMode = holder.view.findViewById(R.id.tvMode);
@@ -118,7 +121,7 @@ public class Historico extends AppCompatActivity {
 
                         tvPlayer.setText(scoreList.get(position).getWinner());
                         tvMode.setText(scoreList.get(position).getMode());
-                        tvInfo.setText(""+info);
+                        tvInfo.setText(info);
                 }
 
                 @Override

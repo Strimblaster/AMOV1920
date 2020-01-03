@@ -46,20 +46,6 @@ public class MainActivity extends AppCompatActivity {
                                         finish();
                                 }else {
                                         player = players.get(0);
-//                                        Remover esta parte!!!!!! SO PARA TESTES!!!!!
-                                        Score score = new Score();
-                                        score.setMode("M1");
-                                        score.setTimeM1(130);
-                                        score.setWinner(player.getName());
-                                        score.setRightPlaysM2M3(0);
-                                        appDatabase.conn().deleteAll();
-                                        appDatabase.score().deleteAll();
-                                        long id = appDatabase.score().insertScore(score);
-                                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
-                                        playerScoreJoin.setPlayerID(player.getId());
-                                        playerScoreJoin.setScoreID(id);
-                                        appDatabase.conn().insert(playerScoreJoin);
-                                        //                                       ATE AQUI SO PARA TESTES!!!!!
                                 }
                         }
                 };

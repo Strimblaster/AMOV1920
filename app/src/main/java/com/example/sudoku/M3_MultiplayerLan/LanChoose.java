@@ -3,37 +3,26 @@ package com.example.sudoku.M3_MultiplayerLan;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Trace;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
-
-import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.DifficultyView;
 import com.example.sudoku.Jogar;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
-import com.example.sudoku.Result;
 
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-public class LanMode extends AppCompatActivity {
+public class LanChoose extends AppCompatActivity {
 
     Button btnBack, btnServer, btnClient;
     Player player;
@@ -48,7 +37,7 @@ public class LanMode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lan_mode);
-//        player = (Player) getIntent().getSerializableExtra("player");
+        player = MainActivity.player;
         btnBack = findViewById(R.id.btnBack);
         btnServer = findViewById(R.id.btnServer);
         btnClient = findViewById(R.id.btnClient);
@@ -56,7 +45,7 @@ public class LanMode extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LanMode.this, Jogar.class));
+                startActivity(new Intent(LanChoose.this, Jogar.class));
                 overridePendingTransition(R.anim.slide_left,R.anim.slide_out_right);
                 finish();
             }
@@ -66,11 +55,10 @@ public class LanMode extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "IP: "+ getLocalIpAddress(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(new Intent(LanMode.this, DifficultyView.class));
-                player = new Player("Server");
+                Intent intent = new Intent(new Intent(LanChoose.this, DifficultyView.class));
                 intent.putExtra("mode", "M3");
                 intent.putExtra("type", "server");
-                intent.putExtra("player", player);
+                intent.putExtra("totalPlayers", 1); // TEM DE SER FEITO UM VIEW PARA PEDIR O NUMERO DE JOGADORES
                 intent.putExtra("ip", getLocalIpAddress());
 
                 startActivity(intent);
@@ -82,7 +70,7 @@ public class LanMode extends AppCompatActivity {
         btnClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LanMode.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LanChoose.this);
                 View view = getLayoutInflater().inflate(R.layout.dialog_client,null);
                 final EditText serverip = view.findViewById(R.id.serverIp);
                 Button btnConnect = view.findViewById(R.id.btnConnect);
@@ -99,10 +87,7 @@ public class LanMode extends AppCompatActivity {
                                 public void run() {
                                     try {
                                         if (validarIP(ip)) {
-                                            Intent intent = new Intent(new Intent(LanMode.this, LanMultiplayer.class));
-                                            player = new Player("Cliente");
-                                            intent.putExtra("mode", "M3");
-                                            intent.putExtra("player", player);
+                                            Intent intent = new Intent(new Intent(LanChoose.this, LanClient.class));
                                             intent.putExtra("type", "client");
                                             intent.putExtra("ip", ip);
                                             dialog.dismiss();
@@ -110,14 +95,14 @@ public class LanMode extends AppCompatActivity {
                                             overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
                                             finish();
                                         }else{
-                                            LanMode.this.runOnUiThread(new Runnable() {
+                                            LanChoose.this.runOnUiThread(new Runnable() {
                                                 public void run() {
                                                     Toast.makeText(getApplicationContext(), "Insira um endereço IP válido", Toast.LENGTH_LONG).show();
                                                 }
                                             });
                                         }
                                     } catch (IOException e) {
-                                        LanMode.this.runOnUiThread(new Runnable() {
+                                        LanChoose.this.runOnUiThread(new Runnable() {
                                             public void run() {
                                                 Toast.makeText(getApplicationContext(), "Ocorreu um erro inesperado!", Toast.LENGTH_SHORT).show();
                                             }

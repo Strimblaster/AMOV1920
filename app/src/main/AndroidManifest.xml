@@ -17,12 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Historico"></activity>
+        <activity android:name=".M3_MultiplayerLan.LanClient"
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".M3_MultiplayerLan.LanServer"
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".Historico"
+            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".camera"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
         <activity
-            android:name=".M3_MultiplayerLan.LanMode"
+            android:name=".M3_MultiplayerLan.LanChoose"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".DifficultyView"
@@ -30,10 +36,6 @@
         <activity
             android:name=".Result"
             android:label="Resultado"
-            android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".M3_MultiplayerLan.LanMultiplayer"
-            android:label="@string/title_activity_connect"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".M2_MultiPlayerLocal.Multiplayer"
@@ -51,13 +53,13 @@
             android:name=".Profile"
             android:label="@string/title_activity_profile"
             android:theme="@style/FullscreenTheme"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

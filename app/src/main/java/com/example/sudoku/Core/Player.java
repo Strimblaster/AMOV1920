@@ -25,6 +25,8 @@ public class Player implements Serializable {
         @Ignore
         private int points;
         @Ignore
+        private int errors;
+        @Ignore
         private Stack<Integer> timeStack;
         @Ignore
         private boolean playing;
@@ -36,6 +38,7 @@ public class Player implements Serializable {
                 this.playing = false;
                 this.photoPath = photoPath;
                 this.rightPlays = 0;
+                this.errors = 0;
         }
 
         @Ignore
@@ -46,6 +49,7 @@ public class Player implements Serializable {
                 this.playing = false;
                 this.photoPath = "";
                 this.rightPlays = 0;
+                this.errors = 0;
         }
 
         @Ignore
@@ -56,6 +60,7 @@ public class Player implements Serializable {
                 this.timeStack = new Stack<>();
                 this.playing = false;
                 this.rightPlays = 0;
+                this.errors = 0;
         }
 
         public void addRightPlays() {
@@ -94,13 +99,15 @@ public class Player implements Serializable {
                 timeStack.push(20);
         }
 
+        void resetTime() {
+                timeStack.clear();
+                timeStack.push(30);
+        }
+
         public void removePoints(int points) {
                 this.points -= points;
         }
 
-        private int showExtraTime() {
-                return this.timeStack.peek();
-        }
 
         public boolean isPlaying() {
                 return playing;
@@ -116,5 +123,13 @@ public class Player implements Serializable {
 
         public int getRightPlays() {
                 return rightPlays;
+        }
+
+        public int getErrors() {
+                return errors;
+        }
+
+        public void addErrors() {
+                this.errors++;
         }
 }

@@ -115,7 +115,7 @@ public class Multiplayer extends AppCompatActivity {
                 n9 = findViewById(R.id.n9);
                 tvTime = findViewById(R.id.tvTime);
                 tvPoints = findViewById(R.id.tvPoints);
-                tvPlayer1 = findViewById(R.id.tvPlayer1);
+                tvPlayer1 = findViewById(R.id.tvPlayer);
                 tvPlayer2 = findViewById(R.id.tvPlayer2);
                 tvErrors = findViewById(R.id.tvErrors);
                 int maxErros = (int) (viewMultiplayerLocal.getGrid().getDifficulty().getErros() * 1.5);
@@ -305,7 +305,7 @@ public class Multiplayer extends AppCompatActivity {
                 if (viewMultiplayerLocal.getGrid().isCorrect()) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Parabéns!");
-                        Score score = new Score();
+                        final Score score = new Score();
                         if (viewMultiplayerLocal.getPlayer1().getPoints() > viewMultiplayerLocal.getPlayer2().getPoints()) {
                                 intent.putExtra("message", "Conseguiram completar o puzzle!  O" + viewMultiplayerLocal.getPlayer1().getName() + "foi o vencedor com " + viewMultiplayerLocal.getPlayer1().getPoints() + ", com mais " + (viewMultiplayerLocal.getPlayer1().getPoints() - viewMultiplayerLocal.getPlayer2().getPoints()) + " que o " + viewMultiplayerLocal.getPlayer2().getPoints());
                                 score.setWinner(viewMultiplayerLocal.getPlayer1().getName());
@@ -315,13 +315,22 @@ public class Multiplayer extends AppCompatActivity {
                                 score.setWinner(viewMultiplayerLocal.getPlayer2().getName());
                                 score.setRightPlaysM2M3(viewMultiplayerLocal.getPlayer2().getRightPlays());
                         }
-                        score.setMode("M2");
-                        score.setTimeM1(0);
-                        score.setWinner(MainActivity.player.getName());
-                        long id = MainActivity.appDatabase.score().insertScore(score);
-                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
-                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
-                        playerScoreJoin.setScoreID(id);
+                        Thread saveScore = new Thread(){
+                                @Override
+                                public void run() {
+                                        super.run();
+                                        score.setMode("M2");
+                                        score.setTimeM1(0);
+                                        score.setWinner(MainActivity.player.getName());
+                                        long id = MainActivity.appDatabase.score().insertScore(score);
+                                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
+                                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
+                                        playerScoreJoin.setScoreID(id);
+                                }
+                        };
+                        saveScore.start();
+
+
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                         finish();

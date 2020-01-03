@@ -206,6 +206,7 @@ public class SinglePlayer extends AppCompatActivity {
                                 if (viewSinglePlayer.getSelectedCell() != null) {
                                         if (!viewSinglePlayer.isNotes()) {
                                                 viewSinglePlayer.setValueSelectedCell(value);
+                                                viewSinglePlayer.getSelectedCell().removeBadValue();
                                                 if (!viewSinglePlayer.getGrid().isPossible(viewSinglePlayer.getSelectedCell())) {
                                                         viewSinglePlayer.getSelectedCell().setBadValue();
                                                         erros++;
@@ -254,16 +255,27 @@ public class SinglePlayer extends AppCompatActivity {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Parabéns!");
                         intent.putExtra("message", "Conseguiu ganhar o jogo, somando " + points + " pontos em " + minutes + "m " + seconds + "s !");
-                        Score score = new Score();
-                        score.setMode("M1");
-                        score.setTimeM1((minutes * 60)+ seconds);
-                        score.setWinner(MainActivity.player.getName());
-                        score.setRightPlaysM2M3(0);
-                        long id = MainActivity.appDatabase.score().insertScore(score);
-                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
-                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
-                        playerScoreJoin.setScoreID(id);
-                        MainActivity.appDatabase.conn().insert(playerScoreJoin);
+                        Thread saveScore = new Thread(){
+                                @Override
+                                public void run() {
+                                        super.run();
+                                        Score score = new Score();
+                                        score.setMode("M1");
+                                        score.setTimeM1((minutes * 60)+ seconds);
+                                        score.setWinner(MainActivity.player.getName());
+                                        score.setRightPlaysM2M3(0);
+                                        long id = MainActivity.appDatabase.score().insertScore(score);
+                                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
+                                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
+                                        playerScoreJoin.setScoreID(id);
+                                }
+                        };
+                        saveScore.start();
+                        try {
+                                saveScore.join();
+                        } catch (InterruptedException e) {
+                                e.printStackTrace();
+                        }
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                         finish();

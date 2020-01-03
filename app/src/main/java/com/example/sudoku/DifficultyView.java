@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.sudoku.Core.Difficulty;
-import com.example.sudoku.Core.Player;
 import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.M2_MultiPlayerLocal.Multiplayer;
-import com.example.sudoku.M3_MultiplayerLan.LanMultiplayer;
-
-import java.net.InetAddress;
+import com.example.sudoku.M3_MultiplayerLan.LanClient;
+import com.example.sudoku.M3_MultiplayerLan.LanServer;
 
 public class DifficultyView extends AppCompatActivity {
     Button btnEasy, btnMedium, btnHard, btnRandom, btnBack;
@@ -147,9 +144,17 @@ public class DifficultyView extends AppCompatActivity {
     }
 
     private void goToLanMultiplayer(Difficulty difficulty) {
-        Intent intent = new Intent(this,  LanMultiplayer.class);
+        String type = getIntent().getStringExtra("type");
+        Intent intent;
+        assert type != null;
+        if (type.equals("server")) {
+            intent= new Intent(this, LanServer.class);
+            intent.putExtra("totalPlayers",getIntent().getIntExtra("totalPlayers", 1));
+        }else{
+            intent = new Intent(this, LanClient.class);
+        }
         intent.putExtra("Difficulty",difficulty);
-        intent.putExtra("type",  getIntent().getStringExtra("type"));
+        intent.putExtra("type",  type);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
         progressBar.setVisibility(View.GONE);

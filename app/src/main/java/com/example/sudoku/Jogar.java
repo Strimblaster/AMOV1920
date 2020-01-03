@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.sudoku.M3_MultiplayerLan.LanMode;
+import com.example.sudoku.M3_MultiplayerLan.LanChoose;
 
 
 public class Jogar extends AppCompatActivity {
@@ -65,7 +65,7 @@ public class Jogar extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Jogar.this, LanMode.class);
+                Intent intent = new Intent(Jogar.this, LanChoose.class);
                 intent.putExtra("mode","M3");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
