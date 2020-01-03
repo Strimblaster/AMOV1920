@@ -1,12 +1,19 @@
 package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.sudoku.Core.AppDatabase;
 import com.example.sudoku.Core.Player;
@@ -20,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         public static AppDatabase appDatabase;
         private Button btnJogar, btnProfile, btnHistorico;
         public static Player player;
+        private boolean connected;
+        private boolean cameraAndStorage;
 
         @Override
         public void onBackPressed() {
@@ -28,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+                connected = false;
+                cameraAndStorage = false;
+                Thread connectionChecker = new connectionChecker();
+                connectionChecker.start();
+                Thread cameraAndStorageChecker = new cameraAndStorageChecker();
+                cameraAndStorageChecker.start();
                 appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").build();
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_main_menu);
@@ -44,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                                         Intent intent = new Intent(MainActivity.this, Profile.class);
                                         startActivity(intent);
                                         finish();
-                                }else {
+                                } else {
                                         player = players.get(0);
                                 }
                         }
@@ -54,20 +69,29 @@ public class MainActivity extends AppCompatActivity {
                 btnJogar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, Jogar.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
-                                finish();
+                                if (connected) {
+
+                                        Intent intent = new Intent(MainActivity.this, Jogar.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
+                                        finish();
+                                } else {
+                                        Toast.makeText(MainActivity.this, "Por favor ligue-se a internet!", Toast.LENGTH_LONG).show();
+                                }
                         }
                 });
 
                 btnProfile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, Profile.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
-                                finish();
+                                if (cameraAndStorage) {
+                                        Intent intent = new Intent(MainActivity.this, Profile.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
+                                        finish();
+                                } else {
+                                        Toast.makeText(MainActivity.this, "Conceda as permissões necessárias!", Toast.LENGTH_LONG).show();
+                                }
                         }
                 });
                 btnHistorico.setOnClickListener(new View.OnClickListener() {
@@ -81,4 +105,26 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         }
+
+        private class cameraAndStorageChecker extends Thread{
+                @Override
+                public void run() {
+                        super.run();
+                        while (!cameraAndStorage){
+                                cameraAndStorage = (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                                        || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+                        }
+                }
+        }
+
+        private class connectionChecker extends Thread {
+                public void run() {
+                        while (!connected) {
+                                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                                connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                        }
+                }
+        }
+
 }
