@@ -19,6 +19,7 @@ import com.example.sudoku.Core.Data;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
+import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
@@ -28,6 +29,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class LanClient extends AppCompatActivity {
 
@@ -42,8 +44,10 @@ public class LanClient extends AppCompatActivity {
         private Socket socket;
         private final int port = 2021;
         private final int portReceive = 1920;
+        private final int portPing= 2020;
         private ObjectOutputStream objectOutputStream;
         private ObjectInputStream objectInputStream;
+        private  boolean leave;
 
         public void onBackPressed() {
                 startActivity(new Intent(this, LanChoose.class));
@@ -59,6 +63,7 @@ public class LanClient extends AppCompatActivity {
                 FrameLayout flSudoku = findViewById(R.id.flSudoku);
                 ServerIP = getIntent().getStringExtra("ip");
                 viewClient = new ViewLanClient(this);
+                leave = false;
                 flSudoku.addView(viewClient);
                 n1 = findViewById(R.id.n1);
                 n2 = findViewById(R.id.n2);
@@ -265,8 +270,18 @@ public class LanClient extends AppCompatActivity {
                                         Thread updateMe = new ViewUpdater();
                                         updateMe.start();
                                         validate();
-                                } catch (ClassNotFoundException | IOException e) {
+                                } catch (IOException | ClassNotFoundException e) {
                                         e.printStackTrace();
+                                        if (!leave) {
+                                                e.fillInStackTrace();
+                                                Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
+                                                intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
+                                                intent.putExtra("grid", viewClient.getData().getGrid());
+                                                startActivity(intent);
+                                                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+                                                finish();
+                                                leave = true;
+                                        }
                                 }
                         }
                 }
@@ -275,9 +290,22 @@ public class LanClient extends AppCompatActivity {
                 public void run() {
                         try {
                                 Socket socket = new Socket(ServerIP, portReceive);
-                                objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                                objectOutputStream.writeObject(viewClient.getData());
-                                objectOutputStream.flush();
+                                try{
+                                        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                                        objectOutputStream.writeObject(viewClient.getData());
+                                        objectOutputStream.flush();
+                                }catch (SocketException e){
+                                        if (!leave) {
+                                                e.fillInStackTrace();
+                                                Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
+                                                intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
+                                                intent.putExtra("grid", viewClient.getData().getGrid());
+                                                startActivity(intent);
+                                                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+                                                finish();
+                                                leave = true;
+                                        }
+                                }
                         } catch (IOException e) {
                                 e.printStackTrace();
                         }

@@ -33,6 +33,7 @@ public class SinglePlayer extends AppCompatActivity {
         Difficulty difficulty;
         ImageButton btnNotes, btnDelete, newGame;
         TextView tvErros, tvPoints, tvTime;
+        Grid grid;
 
         private int seconds;
         private int minutes;
@@ -85,7 +86,12 @@ public class SinglePlayer extends AppCompatActivity {
                 setContentView(R.layout.activity_single_player);
                 FrameLayout flSudoku = findViewById(R.id.flSudoku);
                 difficulty = (Difficulty) getIntent().getSerializableExtra("Difficulty");
-                viewSinglePlayer = new ViewSinglePlayer(this, difficulty);
+                grid = (Grid) getIntent().getSerializableExtra("grid");
+                if (grid != null){
+                        viewSinglePlayer = new ViewSinglePlayer(this, grid);
+                }else{
+                        viewSinglePlayer = new ViewSinglePlayer(this, difficulty);
+                }
                 flSudoku.addView(viewSinglePlayer);
 
                 this.erros = 0;

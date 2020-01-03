@@ -29,6 +29,13 @@ public class ViewSinglePlayer extends View implements Serializable {
                 notes = false;
                 grid = new Grid(difficulty);
         }
+        public ViewSinglePlayer(Context context, Grid grid) {
+                super(context);
+                createPaints();
+                selectedCell = null;
+                notes = false;
+                this.grid = grid;
+        }
 
         public Grid getGrid() {
                 return grid;

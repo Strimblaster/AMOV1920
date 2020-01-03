@@ -20,6 +20,7 @@ import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
+import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
@@ -27,8 +28,10 @@ import com.example.sudoku.Result;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class LanServer extends AppCompatActivity {
@@ -41,6 +44,7 @@ public class LanServer extends AppCompatActivity {
         ImageView ivPlayer;
         LinearLayout btnsLayout, optionsLayout;
         Player player;
+        boolean leave;
 
         private ServerSocket serverSocket;
         private ServerSocket receiveSocket;
@@ -69,6 +73,7 @@ public class LanServer extends AppCompatActivity {
                 clientSockets = new ArrayList<>();
                 player = MainActivity.player;
                 flSudoku.addView(viewServer);
+                leave = false;
 
                 n1 = findViewById(R.id.n1);
                 n2 = findViewById(R.id.n2);
@@ -171,7 +176,6 @@ public class LanServer extends AppCompatActivity {
                                         }
                                         viewServer.setRandomPlayingPlayer();
                                         Timer.start();
-
                                         SendData.start();
                                 } catch (IOException | ClassNotFoundException ex) {
                                         ex.printStackTrace();
@@ -401,11 +405,24 @@ public class LanServer extends AppCompatActivity {
                 public void run() {
                         try {
                                 for (Socket client : clientSockets) {
-                                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
-                                        objectOutputStream.writeObject(viewServer.getData());
-                                        objectOutputStream.flush();
+                                        try {
+                                                ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
+                                                objectOutputStream.writeObject(viewServer.getData());
+                                                objectOutputStream.flush();
+                                        }catch (SocketException e){
+                                                e.fillInStackTrace();
+                                                if (!leave) {
+                                                        Intent intent = new Intent(new Intent(LanServer.this, SinglePlayer.class));
+                                                        intent.putExtra("Difficulty", viewServer.getData().getGrid().getDifficulty());
+                                                        intent.putExtra("grid", viewServer.getData().getGrid());
+                                                        startActivity(intent);
+                                                        overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+                                                        finish();
+                                                        leave = true;
+                                                }
+                                        }
                                 }
-                        } catch (IOException e) {
+                        } catch (IOException  e) {
                                 e.printStackTrace();
                         }
                 }
