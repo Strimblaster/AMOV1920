@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Data;
+import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
@@ -275,8 +276,12 @@ public class LanClient extends AppCompatActivity {
                                         if (!leave) {
                                                 e.fillInStackTrace();
                                                 Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
-                                                intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
-                                                intent.putExtra("grid", viewClient.getData().getGrid());
+                                                if(viewClient.getData() != null) {
+                                                        intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
+                                                        intent.putExtra("grid", viewClient.getData().getGrid());
+                                                }else{
+                                                        intent.putExtra("Difficulty", Difficulty.random);
+                                                }
                                                 startActivity(intent);
                                                 overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
                                                 finish();
@@ -298,8 +303,12 @@ public class LanClient extends AppCompatActivity {
                                         if (!leave) {
                                                 e.fillInStackTrace();
                                                 Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
-                                                intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
-                                                intent.putExtra("grid", viewClient.getData().getGrid());
+                                                if(viewClient.getData() != null) {
+                                                        intent.putExtra("Difficulty", viewClient.getData().getGrid().getDifficulty());
+                                                        intent.putExtra("grid", viewClient.getData().getGrid());
+                                                }else{
+                                                        intent.putExtra("Difficulty", Difficulty.random);
+                                                }
                                                 startActivity(intent);
                                                 overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
                                                 finish();

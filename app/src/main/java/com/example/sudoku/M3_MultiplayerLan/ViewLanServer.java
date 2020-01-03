@@ -1,21 +1,18 @@
 package com.example.sudoku.M3_MultiplayerLan;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.view.MotionEvent;
 import android.view.View;
-
 import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Data;
 import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
-
 import java.io.Serializable;
+
 
 public class ViewLanServer extends View implements Serializable {
         Paint paintMainLines, paintMainNumbers, paintSmallNumbers, paintOriginalNumbers;
@@ -274,11 +271,9 @@ public class ViewLanServer extends View implements Serializable {
                 return  data.getErrors();
         }
 
-        public void addErrors() {
-                data.addErrors();
-        }
 
         public int getGridSize(){
                 return data.getGridSize();
         }
+
 }

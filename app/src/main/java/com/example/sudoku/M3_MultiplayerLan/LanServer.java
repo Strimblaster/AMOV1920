@@ -1,13 +1,20 @@
 package com.example.sudoku.M3_MultiplayerLan;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +27,7 @@ import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
+import com.example.sudoku.Historico;
 import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
@@ -28,7 +36,6 @@ import com.example.sudoku.Result;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -36,15 +43,14 @@ import java.util.ArrayList;
 
 public class LanServer extends AppCompatActivity {
 
-        ViewLanServer viewServer;
-        Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
-        Difficulty difficulty;
-        ImageButton btnNotes, btnDelete;
-        TextView tvErros, tvPoints, tvTime, tvPlayer;
-        ImageView ivPlayer;
-        LinearLayout btnsLayout, optionsLayout;
-        Player player;
-        boolean leave;
+        private ViewLanServer viewServer;
+        private Button n1, n2, n3, n4, n5, n6, n7, n8, n9;
+        private Difficulty difficulty;
+        private ImageButton btnNotes, btnDelete;
+        private TextView tvErros, tvPoints, tvTime, tvPlayer;
+        private ImageView ivPlayer;
+        private LinearLayout btnsLayout, optionsLayout;
+        private Player player;
 
         private ServerSocket serverSocket;
         private ServerSocket receiveSocket;
@@ -52,6 +58,7 @@ public class LanServer extends AppCompatActivity {
         private final int portReceive = 1920;
         private ArrayList<Socket> clientSockets;
         private int totalPlayers;
+        private boolean leave;
 
         public void onBackPressed() {
                 startActivity(new Intent(this, LanChoose.class));
@@ -93,6 +100,8 @@ public class LanServer extends AppCompatActivity {
                 btnDelete = findViewById(R.id.btnDelete);
                 btnsLayout = findViewById(R.id.Numbers);
                 optionsLayout = findViewById(R.id.optionsLayout);
+
+
 
 
                 btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +166,8 @@ public class LanServer extends AppCompatActivity {
                         Thread Timer = new Timer();
                         Thread SendData = new SendData();
                         Thread ReceiveData = new ReceiveData();
+
+
                         @Override
                         public void run() {
                                 super.run();
@@ -164,13 +175,14 @@ public class LanServer extends AppCompatActivity {
                                         serverSocket = new ServerSocket(port);
                                         ReceiveData.start();
                                         int total = 0;
-                                        while (total < totalPlayers) {
+
+
+                                        while (total != totalPlayers) {
                                                 Socket clientSocket;
                                                 clientSocket = serverSocket.accept();
                                                 clientSockets.add(clientSocket);
                                                 ObjectInputStream receivePlayer = new ObjectInputStream(clientSocket.getInputStream());
                                                 Player player = (Player) receivePlayer.readObject();
-                                                System.out.println("O jogador "+player.getName()+" ligou-se!");
                                                 viewServer.addPlayer(player);
                                                 total++;
                                         }
@@ -395,6 +407,15 @@ public class LanServer extends AppCompatActivity {
                                         }
                                 } catch (IOException | ClassNotFoundException e) {
                                         e.printStackTrace();
+                                        if (!leave) {
+                                                Intent intent = new Intent(new Intent(LanServer.this, SinglePlayer.class));
+                                                intent.putExtra("Difficulty", viewServer.getData().getGrid().getDifficulty());
+                                                intent.putExtra("grid", viewServer.getData().getGrid());
+                                                startActivity(intent);
+                                                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+                                                finish();
+                                                leave = true;
+                                        }
                                 }
                         }
                 }

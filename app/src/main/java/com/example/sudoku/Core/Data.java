@@ -83,7 +83,7 @@ public class Data implements Serializable {
                 this.grid = grid;
         }
 
-        ArrayList<Player> getPlayers() {
+        public ArrayList<Player> getPlayers() {
                 return players;
         }
 
