@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context="MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:fontFamily="@font/roboto"
+            android:text="PERFIL"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="60sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            tools:src="@mipmap/ic_placeholder" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tfName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:backgroundTint="@color/colorBlue"
+            android:fontFamily="@font/roboto"
+            android:hint="Nome"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="@color/colorBlue"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="24sp"
+            android:typeface="normal" />
+
+        <Button
+            android:id="@+id/btnPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@color/colorOrange"
+            android:fontFamily="@font/roboto"
+            android:padding="10dp"
+            android:text="Nova foto"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold"></Button>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorCian"
+            android:fontFamily="@font/roboto"
+            android:padding="10dp"
+            android:text="@string/btnGuardar"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold">
+
+        </Button>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorBlue"
+            android:fontFamily="@font/roboto"
+            android:padding="10sp"
+            android:text="Voltar"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>

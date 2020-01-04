@@ -1,38 +1,28 @@
 package com.example.sudoku.M3_MultiplayerLan;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.sudoku.Core.Cell;
 import com.example.sudoku.Core.Data;
 import com.example.sudoku.Core.Difficulty;
 import com.example.sudoku.Core.Player;
 import com.example.sudoku.Core.PlayerScoreJoin;
 import com.example.sudoku.Core.Score;
-import com.example.sudoku.Historico;
 import com.example.sudoku.M1_SinglePlayer.SinglePlayer;
 import com.example.sudoku.MainActivity;
 import com.example.sudoku.R;
 import com.example.sudoku.Result;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -48,7 +38,6 @@ public class LanServer extends AppCompatActivity {
         private Difficulty difficulty;
         private ImageButton btnNotes, btnDelete;
         private TextView tvErros, tvPoints, tvTime, tvPlayer;
-        private ImageView ivPlayer;
         private LinearLayout btnsLayout, optionsLayout;
         private Player player;
 
@@ -56,9 +45,10 @@ public class LanServer extends AppCompatActivity {
         private ServerSocket receiveSocket;
         private final int port = 2021;
         private final int portReceive = 1920;
-        private ArrayList<Socket> clientSockets;
+        private ArrayList<Client> clients;
         private int totalPlayers;
         private boolean leave;
+        private boolean exit;
 
         public void onBackPressed() {
                 startActivity(new Intent(this, LanChoose.class));
@@ -73,14 +63,16 @@ public class LanServer extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_lan_server);
-                FrameLayout flSudoku = findViewById(R.id.flSudoku);
+                final FrameLayout flSudoku = findViewById(R.id.flSudoku);
                 difficulty = (Difficulty) getIntent().getSerializableExtra("Difficulty");
-                totalPlayers = getIntent().getIntExtra("totalPlayers", 1);
+                totalPlayers = getIntent().getIntExtra("totalPlayers", 2);
                 viewServer = new ViewLanServer(this, difficulty);
-                clientSockets = new ArrayList<>();
+                clients = new ArrayList<>();
                 player = MainActivity.player;
                 flSudoku.addView(viewServer);
                 leave = false;
+                exit = false;
+
 
                 n1 = findViewById(R.id.n1);
                 n2 = findViewById(R.id.n2);
@@ -95,7 +87,6 @@ public class LanServer extends AppCompatActivity {
                 tvErros = findViewById(R.id.tvErrors);
                 tvPoints = findViewById(R.id.tvPoints);
                 tvPlayer = findViewById(R.id.tvPlayer);
-                ivPlayer = findViewById(R.id.ivPlayer);
                 btnNotes = findViewById(R.id.btnNotes);
                 btnDelete = findViewById(R.id.btnDelete);
                 btnsLayout = findViewById(R.id.Numbers);
@@ -131,35 +122,46 @@ public class LanServer extends AppCompatActivity {
                 viewServer.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
-                                if (viewServer.amIPlaying()) {
-                                        if (event.getAction() == MotionEvent.ACTION_DOWN)
-                                                return true;
-                                        if (event.getAction() == MotionEvent.ACTION_UP) {
-                                                int px = (int) event.getX();
-                                                int py = (int) event.getY();
-                                                viewServer.disableNotes();
-                                                int w = viewServer.getWidth();
-                                                int cellWidth = w / viewServer.getGridSize();
-                                                int h = viewServer.getHeight();
-                                                int cellHeight = h / viewServer.getGridSize();
+                                if (viewServer.getData() != null && clients.size() != 0) {
+                                        if (viewServer.amIPlaying()) {
+                                                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                                                        return true;
+                                                if (event.getAction() == MotionEvent.ACTION_UP) {
+                                                        int px = (int) event.getX();
+                                                        int py = (int) event.getY();
+                                                        viewServer.disableNotes();
+                                                        int w = viewServer.getWidth();
+                                                        int cellWidth = w / viewServer.getGridSize();
+                                                        int h = viewServer.getHeight();
+                                                        int cellHeight = h / viewServer.getGridSize();
 
-                                                final int col = (px / cellWidth);
-                                                final int row = (py / cellHeight);
+                                                        final int col = (px / cellWidth);
+                                                        final int row = (py / cellHeight);
 
-                                                Cell temp = viewServer.getCell(row, col);
-                                                if (!temp.isOriginal()) {
-                                                        viewServer.setSelectedCell(temp);
-                                                        viewServer.getSelectedCell().setCol(col);
-                                                        viewServer.getSelectedCell().setRow(row);
+                                                        Cell temp = viewServer.getCell(row, col);
+                                                        if (!temp.isOriginal()) {
+                                                                viewServer.setSelectedCell(temp);
+                                                                viewServer.getSelectedCell().setCol(col);
+                                                                viewServer.getSelectedCell().setRow(row);
+                                                        }
+                                                        Thread UpdateAndSend = new UpdateAndSend();
+                                                        UpdateAndSend.start();
+                                                        return true;
                                                 }
-                                                Thread UpdateAndSend = new UpdateAndSend();
-                                                UpdateAndSend.start();
-                                                return true;
                                         }
                                 }
                                 return false;
                         }
                 });
+                AlertDialog.Builder builder = new AlertDialog.Builder(LanServer.this);
+                builder.setCancelable(false);
+                View view = getLayoutInflater().inflate(R.layout.dialog_waiting, null);
+                final TextView serverip = view.findViewById(R.id.tvMyIP);
+                serverip.setText(LanChoose.getLocalIpAddress());
+                builder.setView(view);
+                final AlertDialog dialog = builder.create();
+
+                dialog.show();
 
 
                 Thread mainThread = new Thread(){
@@ -174,18 +176,18 @@ public class LanServer extends AppCompatActivity {
                                 try {
                                         serverSocket = new ServerSocket(port);
                                         ReceiveData.start();
-                                        int total = 0;
-
-
+                                        int total = 1;
                                         while (total != totalPlayers) {
-                                                Socket clientSocket;
-                                                clientSocket = serverSocket.accept();
-                                                clientSockets.add(clientSocket);
-                                                ObjectInputStream receivePlayer = new ObjectInputStream(clientSocket.getInputStream());
-                                                Player player = (Player) receivePlayer.readObject();
+                                                Socket clientSocket = serverSocket.accept();
+                                                ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+                                                ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+
+                                                clients.add(new Client(clientSocket,objectInputStream, objectOutputStream));
+                                                Player player = (Player) objectInputStream.readObject();
                                                 viewServer.addPlayer(player);
                                                 total++;
                                         }
+                                        dialog.dismiss();
                                         viewServer.setRandomPlayingPlayer();
                                         Timer.start();
                                         SendData.start();
@@ -220,6 +222,7 @@ public class LanServer extends AppCompatActivity {
                                 if (!viewServer.getSelectedCell().isEarnedPoints()) {
                                         viewServer.getPlayingPlayer().addPoints(viewServer.getDifficultyPoints());
                                         viewServer.getPlayingPlayer().addRightPlays();
+                                        viewServer.getPlayingPlayer().addExtraTime();
                                         if (viewServer.isColCompleted(viewServer.getSelectedCell())) {
                                                 viewServer.getPlayingPlayer().addPoints(viewServer.getDifficultyPoints() * 2);
                                         }
@@ -233,6 +236,7 @@ public class LanServer extends AppCompatActivity {
                                 }
                                 viewServer.setCell(viewServer.getSelectedCell());
                         }
+                        validate();
                 }
         }
 
@@ -247,7 +251,6 @@ public class LanServer extends AppCompatActivity {
                                         } else if (viewServer.canNote(viewServer.getSelectedCell(), value)) {
                                                 viewServer.addNoteSelectedCell(value);
                                         }
-                                        validate();
                                         Thread updateALL = new UpdateAndSend();
                                         updateALL.start();
                                 }
@@ -258,10 +261,10 @@ public class LanServer extends AppCompatActivity {
 
 
         private void validate() {
-                if (viewServer.getErrors()>= viewServer.getTotalErrors()) {
+                if (viewServer.getPlayingPlayer().getErrors() >= viewServer.getTotalErrors() ) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Ohh, que pena!");
-                        intent.putExtra("message", "Esgotou o limite de erros (" + viewServer.getTotalErrors() + ")!");
+                        intent.putExtra("message", "O jogador "+viewServer.getPlayingPlayer().getName()+" ultrapassou o limite de erros ("+viewServer.getTotalErrors()+")!");
                         Thread  updateALL = new UpdateAndSend();
                         updateALL.start();
                         try {
@@ -276,7 +279,7 @@ public class LanServer extends AppCompatActivity {
                 if (viewServer.isCorrect()) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Parabéns!");
-                        intent.putExtra("message", "Conseguiram completar o puzzle, o jogador"+viewServer.getWinnerPlayer().getName()+" ganhou, com um total de " + viewServer.getWinnerPlayer().getPoints() + " pontos com " + viewServer.getWinnerPlayer().getRightPlays() + " jogadas certas !");
+                        intent.putExtra("message", "Conseguiram completar o puzzle, o jogador "+viewServer.getWinnerPlayer().getName()+" ganhou, com um total de " + viewServer.getWinnerPlayer().getPoints() + " pontos com " + viewServer.getWinnerPlayer().getRightPlays() + " jogadas certas !");
                         Thread saveScore = new Thread(){
                                 @Override
                                 public void run() {
@@ -294,8 +297,6 @@ public class LanServer extends AppCompatActivity {
                                 }
                         };
                         saveScore.start();
-
-
                         viewServer.weHaveAWinner();
                         Thread  updateALL = new UpdateAndSend();
                         updateALL.start();
@@ -344,6 +345,7 @@ public class LanServer extends AppCompatActivity {
                                                 btnsLayout.setVisibility(View.VISIBLE);
                                                 optionsLayout.setVisibility(View.VISIBLE);
                                         }
+
                                         tvPlayer.setText(viewServer.getPlayingPlayer().getName());
                                         tvTime.setText(viewServer.getTime() + "s");
                                         tvErros.setText(viewServer.getPlayingPlayer().getErrors()+"/"+viewServer.getTotalErrors());
@@ -369,6 +371,7 @@ public class LanServer extends AppCompatActivity {
                                                         }else{
                                                                 if (!viewServer.getPlayingPlayer().hasMoreTime()){
                                                                         viewServer.nextPlayer();
+                                                                        viewServer.disableNotes();
                                                                 }
                                                                 viewServer.setTime(viewServer.getPlayingPlayer().getExtraTime());
                                                         }
@@ -397,17 +400,21 @@ public class LanServer extends AppCompatActivity {
                         }
                         while (true){
                                 try {
-                                        Socket socket = receiveSocket.accept();
-                                        Data data = (Data) (new ObjectInputStream(socket.getInputStream())).readObject();
-                                        if (data != null) {
-                                                viewServer.setData(data);
-                                                validatePlay();
-                                                Thread updateAndSend = new UpdateAndSend();
-                                                updateAndSend.start();
+                                        if (!receiveSocket.isClosed()) {
+                                                Socket socket = receiveSocket.accept();
+                                                Data data = (Data) (new ObjectInputStream(socket.getInputStream())).readObject();
+                                                if (data != null) {
+                                                        viewServer.setData(data);
+                                                        if (viewServer.getSelectedCell().getValue() > 0) {
+                                                                validatePlay();
+                                                        }
+                                                        Thread updateAndSend = new UpdateAndSend();
+                                                        updateAndSend.start();
+                                                }
                                         }
                                 } catch (IOException | ClassNotFoundException e) {
                                         e.printStackTrace();
-                                        if (!leave) {
+                                        if (!leave && !exit) {
                                                 Intent intent = new Intent(new Intent(LanServer.this, SinglePlayer.class));
                                                 intent.putExtra("Difficulty", viewServer.getData().getGrid().getDifficulty());
                                                 intent.putExtra("grid", viewServer.getData().getGrid());
@@ -425,14 +432,14 @@ public class LanServer extends AppCompatActivity {
         private class SendData extends Thread {
                 public void run() {
                         try {
-                                for (Socket client : clientSockets) {
+                                for (Client client : clients) {
                                         try {
-                                                ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
-                                                objectOutputStream.writeObject(viewServer.getData());
-                                                objectOutputStream.flush();
+                                                client.getObjectOutputStream().reset();
+                                                client.getObjectOutputStream().writeObject(viewServer.getData());
+                                                client.getObjectOutputStream().flush();
                                         }catch (SocketException e){
                                                 e.fillInStackTrace();
-                                                if (!leave) {
+                                                if (!leave && !exit) {
                                                         Intent intent = new Intent(new Intent(LanServer.this, SinglePlayer.class));
                                                         intent.putExtra("Difficulty", viewServer.getData().getGrid().getDifficulty());
                                                         intent.putExtra("grid", viewServer.getData().getGrid());
@@ -455,6 +462,34 @@ public class LanServer extends AppCompatActivity {
                         updateMe.start();
                         Thread updateClients = new SendData();
                         updateClients.start();
+                }
+        }
+
+        @Override
+        protected void onDestroy() {
+                super.onDestroy();
+                try {
+                        serverSocket.close();
+                        receiveSocket.close();
+                        exit = true;
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+
+        }
+
+        private  class Client {
+                private Socket socket;
+                private ObjectOutputStream objectOutputStream;
+                private ObjectInputStream objectInputStream;
+
+                 Client(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+                        this.socket = socket;
+                        this.objectOutputStream = objectOutputStream;
+                        this.objectInputStream = objectInputStream;
+                }
+                public ObjectOutputStream getObjectOutputStream() {
+                        return objectOutputStream;
                 }
         }
 }

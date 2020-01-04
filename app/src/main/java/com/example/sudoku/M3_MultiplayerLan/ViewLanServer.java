@@ -266,12 +266,6 @@ public class ViewLanServer extends View implements Serializable {
                 // pois as base de dados são locais, caso fossem online, comparava-se o id de cada player
         }
 
-
-        public int getErrors(){
-                return  data.getErrors();
-        }
-
-
         public int getGridSize(){
                 return data.getGridSize();
         }

@@ -28,7 +28,6 @@ import com.example.sudoku.Result;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -42,13 +41,15 @@ public class LanClient extends AppCompatActivity {
         LinearLayout btnsLayout, optionsLayout;
         String ServerIP;
 
+
         private Socket socket;
         private final int port = 2021;
         private final int portReceive = 1920;
-        private final int portPing= 2020;
         private ObjectOutputStream objectOutputStream;
         private ObjectInputStream objectInputStream;
         private  boolean leave;
+        private  boolean exit;
+        private  boolean saved;
 
         public void onBackPressed() {
                 startActivity(new Intent(this, LanChoose.class));
@@ -65,6 +66,8 @@ public class LanClient extends AppCompatActivity {
                 ServerIP = getIntent().getStringExtra("ip");
                 viewClient = new ViewLanClient(this);
                 leave = false;
+                exit = false;
+                saved = false;
                 flSudoku.addView(viewClient);
                 n1 = findViewById(R.id.n1);
                 n2 = findViewById(R.id.n2);
@@ -109,7 +112,7 @@ public class LanClient extends AppCompatActivity {
                                                         viewClient.getSelectedCell().setCol(col);
                                                         viewClient.getSelectedCell().setRow(row);
                                                 }
-                                                Thread UpdateAndSend = new UpdateAndSend();
+                                                Thread UpdateAndSend = new SendUpdate();
                                                 UpdateAndSend.start();
                                                 return true;
                                         }
@@ -124,7 +127,7 @@ public class LanClient extends AppCompatActivity {
                                 if (viewClient.getSelectedCell() != null) {
                                         viewClient.clearSelectedCell();
                                         viewClient.setCell(viewClient.getSelectedCell());
-                                        Thread UpdateAndSend = new UpdateAndSend();
+                                        Thread UpdateAndSend = new SendUpdate();
                                         UpdateAndSend.start();
                                 }
                         }
@@ -138,7 +141,7 @@ public class LanClient extends AppCompatActivity {
                                         } else {
                                                 viewClient.disableNotes();
                                         }
-                                        Thread UpdateAndSend = new UpdateAndSend();
+                                        Thread UpdateAndSend = new SendUpdate();
                                         UpdateAndSend.start();
                                 }
                         }
@@ -187,7 +190,7 @@ public class LanClient extends AppCompatActivity {
                                         } else if (viewClient.canNote(viewClient.getSelectedCell(), value)) {
                                                 viewClient.addNoteSelectedCell(value);
                                         }
-                                        Thread UpdateAndSend = new UpdateAndSend();
+                                        Thread UpdateAndSend = new SendUpdate();
                                         UpdateAndSend.start();
                                 }
                         }
@@ -195,10 +198,10 @@ public class LanClient extends AppCompatActivity {
         }
 
         private void validate() {
-                if (viewClient.getErrors() >= viewClient.getTotalErrors()) {
+                if (viewClient.getPlayingPlayer().getErrors() >= viewClient.getTotalErrors()) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Ohh, que pena!");
-                        intent.putExtra("message", "Esgotaram o limite de erros (" + viewClient.getTotalErrors() + ")!");
+                        intent.putExtra("message", "O jogador "+viewClient.getPlayingPlayer().getName()+" ultrapassou o limite de erros ("+viewClient.getTotalErrors()+")!");
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                         finish();
@@ -206,21 +209,24 @@ public class LanClient extends AppCompatActivity {
                 if (viewClient.doWeHaveAWinner()) {
                         Intent intent = new Intent(this, Result.class);
                         intent.putExtra("title", "Parabéns!");
-                        intent.putExtra("message", "Conseguiram completar o puzzle, o jogador"+viewClient.getWinnerPlayer().getName()+" ganhou, com um total de " + viewClient.getWinnerPlayer().getPoints() + " pontos com " + viewClient.getWinnerPlayer().getRightPlays() + " jogadas certas !");
+                        intent.putExtra("message", "Conseguiram completar o puzzle, o jogador "+viewClient.getWinnerPlayer().getName()+" ganhou, com um total de " + viewClient.getWinnerPlayer().getPoints() + " pontos com " + viewClient.getWinnerPlayer().getRightPlays() + " jogadas certas !");
                         Thread saveScore = new Thread(){
                                 @Override
                                 public void run() {
                                         super.run();
-                                        Score score = new Score();
-                                        score.setMode("M3");
-                                        score.setTimeM1(0);
-                                        score.setWinner(viewClient.getWinnerPlayer().getName());
-                                        score.setRightPlaysM2M3(viewClient.getWinnerPlayer().getRightPlays());
-                                        long id = MainActivity.appDatabase.score().insertScore(score);
-                                        PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
-                                        playerScoreJoin.setPlayerID(MainActivity.player.getId());
-                                        playerScoreJoin.setScoreID(id);
-                                        MainActivity.appDatabase.conn().insert(playerScoreJoin);
+                                        if(!saved) {
+                                                Score score = new Score();
+                                                score.setMode("M3");
+                                                score.setTimeM1(0);
+                                                score.setWinner(viewClient.getWinnerPlayer().getName());
+                                                score.setRightPlaysM2M3(viewClient.getWinnerPlayer().getRightPlays());
+                                                long id = MainActivity.appDatabase.score().insertScore(score);
+                                                PlayerScoreJoin playerScoreJoin = new PlayerScoreJoin();
+                                                playerScoreJoin.setPlayerID(MainActivity.player.getId());
+                                                playerScoreJoin.setScoreID(id);
+                                                MainActivity.appDatabase.conn().insert(playerScoreJoin);
+                                                saved = true;
+                                        }
                                 }
                         };
                         saveScore.start();
@@ -230,10 +236,8 @@ public class LanClient extends AppCompatActivity {
                 }
         }
 
-        private class UpdateAndSend extends Thread {
+        private class SendUpdate extends Thread {
                 public void run() {
-                        Thread  updateMe = new ViewUpdater();
-                        updateMe.start();
                         Thread sendToServer = new SendData();
                         sendToServer.start();
                 }
@@ -263,9 +267,13 @@ public class LanClient extends AppCompatActivity {
 
         private class ReceiveData extends Thread {
                 public void run() {
-                        while (true) {
+                        try {
+                                objectInputStream = new ObjectInputStream(socket.getInputStream());
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                        while (!leave) {
                                 try {
-                                        objectInputStream = new ObjectInputStream(socket.getInputStream());
                                         Data data = (Data) objectInputStream.readObject();
                                         viewClient.setData(data);
                                         Thread updateMe = new ViewUpdater();
@@ -273,7 +281,7 @@ public class LanClient extends AppCompatActivity {
                                         validate();
                                 } catch (IOException | ClassNotFoundException e) {
                                         e.printStackTrace();
-                                        if (!leave) {
+                                        if (!leave && !exit) {
                                                 e.fillInStackTrace();
                                                 Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
                                                 if(viewClient.getData() != null) {
@@ -282,10 +290,11 @@ public class LanClient extends AppCompatActivity {
                                                 }else{
                                                         intent.putExtra("Difficulty", Difficulty.random);
                                                 }
+                                                leave = true;
                                                 startActivity(intent);
                                                 overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
                                                 finish();
-                                                leave = true;
+                                                return;
                                         }
                                 }
                         }
@@ -300,7 +309,7 @@ public class LanClient extends AppCompatActivity {
                                         objectOutputStream.writeObject(viewClient.getData());
                                         objectOutputStream.flush();
                                 }catch (SocketException e){
-                                        if (!leave) {
+                                        if (!leave && !exit) {
                                                 e.fillInStackTrace();
                                                 Intent intent = new Intent(new Intent(LanClient.this, SinglePlayer.class));
                                                 if(viewClient.getData() != null) {
@@ -320,5 +329,15 @@ public class LanClient extends AppCompatActivity {
                         }
                 }
         }
-}
 
+        @Override
+        protected void onDestroy() {
+                super.onDestroy();
+                try {
+                        socket.close();
+                        exit = true;
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+}

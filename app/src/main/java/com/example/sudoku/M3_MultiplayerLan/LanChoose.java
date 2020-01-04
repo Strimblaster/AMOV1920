@@ -70,12 +70,12 @@ public class LanChoose extends AppCompatActivity {
                                                 if (!number.equals("")){
                                                         int totalPlayers = Integer.parseInt(number);
                                                         if (totalPlayers > 1 && totalPlayers < 4) {
-                                                                Toast.makeText(getApplicationContext(), "IP: " + getLocalIpAddress(), Toast.LENGTH_LONG).show();
                                                                 Intent intent = new Intent(new Intent(LanChoose.this, DifficultyView.class));
                                                                 intent.putExtra("mode", "M3");
                                                                 intent.putExtra("type", "server");
                                                                 intent.putExtra("totalPlayers", totalPlayers);
                                                                 intent.putExtra("ip", getLocalIpAddress());
+                                                                dialog.dismiss();
                                                                 startActivity(intent);
                                                                 overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
                                                                 finish();
@@ -85,6 +85,7 @@ public class LanChoose extends AppCompatActivity {
                                                 }else{
                                                         Toast.makeText(getApplicationContext(), "Insira um valor entre 2 e 3!", Toast.LENGTH_LONG).show();
                                                 }
+
                                         }
                                 });
                                 btnCancel.setOnClickListener(new View.OnClickListener() {

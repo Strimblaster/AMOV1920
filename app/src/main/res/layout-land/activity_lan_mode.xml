@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".M3_MultiplayerLan.LanChoose">
+
+    <TextView
+        android:id="@+id/tvConnection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/roboto"
+        android:text="Ligação"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layoutConnection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutConnection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvConnection">
+
+        <Button
+            android:id="@+id/btnServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorCian"
+            android:fontFamily="@font/roboto"
+            android:text="SERVIDOR"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorOrange"
+            android:fontFamily="@font/roboto"
+            android:text="CLIENTE"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorBlue"
+        android:fontFamily="@font/roboto"
+        android:padding="20sp"
+        android:text="Voltar"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutConnection" />
+</androidx.constraintlayout.widget.ConstraintLayout>
