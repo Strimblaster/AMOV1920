@@ -18,13 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".M3_MultiplayerLan.LanClient"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="portrait" />
-        <activity android:name=".M3_MultiplayerLan.LanServer"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Historico"
+        <activity android:name=".Rules"></activity>
+        <activity
+            android:name=".M3_MultiplayerLan.LanClient"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".M3_MultiplayerLan.LanServer"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".Historico"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".camera"
@@ -62,6 +66,7 @@
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
